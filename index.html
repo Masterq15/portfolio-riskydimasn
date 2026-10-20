@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risky Dimas Nugroho - UI/UX Designer Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Risky.</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="liquid-bg"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="glitch" data-text="Risky Dimas Nugroho">Risky Dimas Nugroho</h1>
+                <p class="job-title">UI/UX Designer</p>
+                <p class="hero-description">Creating beautiful digital experiences with passion and precision</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-secondary">Contact Me</a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-user"></i>
+                        <p>Your Photo Here</p>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>Hello, I'm Risky!</h3>
+                    <p class="about-bio">
+                        Passionate UI/UX Designer focused on creating intuitive and visually appealing digital experiences. 
+                        I combine creativity with functionality to deliver designs that not only look great but also solve real problems.
+                    </p>
+                    <p class="about-bio">
+                        When I'm not designing, you can find me editing videos, exploring creative tools, or competing in esports tournaments.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h4 id="projectCount">0+</h4>
+                            <p>Projects</p>
+                        </div>
+                        <div class="stat">
+                            <h4>4+</h4>
+                            <p>Skills</p>
+                        </div>
+                        <div class="stat">
+                            <h4>100%</h4>
+                            <p>Dedication</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">My Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-figma"></i>
+                    </div>
+                    <h3>Figma</h3>
+                    <p>UI/UX Design & Prototyping</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>CapCut</h3>
+                    <p>Video Editing & Content Creation</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-adobe"></i>
+                    </div>
+                    <h3>Photoshop</h3>
+                    <p>Photo Editing & Graphics</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Esports Player</h3>
+                    <p>Free Fire Competitive Gaming</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">My Projects</h2>
+            <div id="projectsGrid" class="projects-grid">
+                <!-- Projects will be loaded from Firebase -->
+                <div class="loading">Loading projects...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <a href="mailto:riskydimasnu@gmail.com">riskydimasnu@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <a href="https://wa.me/6281328959495" target="_blank">081328959495</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/ig.masterq?cplk=anR0d2s3eGlrNHZt" target="_blank" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://github.com/Masterq15" target="_blank" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@masterqqq" target="_blank" class="social-link">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Risky Dimas Nugroho. All rights reserved.</p>
+            <p class="admin-link"><a href="admin.html">Admin Panel</a></p>
+        </div>
+    </footer>
+
+    <!-- Firebase Configuration -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Firebase configuration - GANTI INI NANTI dengan config kamu
+        const firebaseConfig = {
+           apiKey: "AIzaSyBXDmYyQjYI7RpSw9r5J1GYgZDiPhd-26E",
+           authDomain: "portfolio-riskydimasn.firebaseapp.com",
+           databaseURL: "https://portfolio-riskydimasn-default-rtdb.asia-southeast1.firebasedatabase.app",
+           projectId: "portfolio-riskydimasn",
+           storageBucket: "portfolio-riskydimasn.firebasestorage.app",
+           messagingSenderId: "1074691515560",
+           appId: "1:1074691515560:web:691ecd5e1c76bc19c9ce9d",
+           measurementId: "G-3DJXR6SWN6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Load projects from Firebase
+        const projectsRef = ref(database, 'projects');
+        onValue(projectsRef, (snapshot) => {
+            const projectsGrid = document.getElementById('projectsGrid');
+            projectsGrid.innerHTML = '';
+
+            const data = snapshot.val();
+            if (data) {
+                const projects = Object.entries(data).map(([id, project]) => ({ id, ...project }));
+                
+                // Update project count
+                document.getElementById('projectCount').textContent = projects.length + '+';
+
+                projects.forEach(project => {
+                    const projectCard = `
+                        <div class="project-card">
+                            <div class="project-image">
+                                <img src="${project.image || 'https://via.placeholder.com/400x300?text=Project+Image'}" alt="${project.title}">
+                                <div class="project-overlay">
+                                    <h3>${project.title}</h3>
+                                    <p>${project.description}</p>
+                                    ${project.link ? `<a href="${project.link}" target="_blank" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    projectsGrid.innerHTML += projectCard;
+                });
+            } else {
+                projectsGrid.innerHTML = '<p class="no-projects">No projects yet. Add some from the admin panel!</p>';
+            }
+        });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
