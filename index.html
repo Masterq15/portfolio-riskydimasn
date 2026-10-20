@@ -1,238 +1,599 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Risky Dimas Nugroho - UI/UX Designer Portfolio</title>
+    <title>Risky Dimas Nugroho - Playful Creative Designer & Frontend Explorer</title>
+    <meta name="description"
+        content="Portfolio of Risky Dimas Nugroho, a Creative UI/UX Designer & Frontend Explorer. Inspired by 90s Pop Art & Playful Neo-Brutalism.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">Risky.</div>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <!-- Brand Logo -->
+            <a href="#home" class="brand-logo" aria-label="Risky Dimas Home">
+                <span class="brand-flower" aria-hidden="true">R</span>
+                <span class="brand-name-text">Risky.</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="nav-link-btn active">Home</a></li>
+                    <li><a href="#about" class="nav-link-btn">About</a></li>
+                    <li><a href="#skills" class="nav-link-btn">Skills</a></li>
+                    <li><a href="#achievements" class="nav-link-btn">Achievements</a></li>
+                    <li><a href="#projects" class="nav-link-btn">Projects</a></li>
+                    <li><a href="#contact" class="nav-link-btn">Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- Actions (Theme Toggle & Mobile Hamburger) -->
+            <div class="nav-actions">
+                <button id="themeSwitchBtn" class="theme-switch-btn" title="Toggle Light / Dark Mode"
+                    aria-label="Toggle theme">
+                    <i id="themeIcon" class="fas fa-sun"></i>
+                </button>
+
+                <button id="hamburgerBtn" class="hamburger-btn" aria-label="Open mobile menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="liquid-bg"></div>
-        <div class="container hero-content">
-            <div class="hero-text">
-                <h1 class="glitch" data-text="Risky Dimas Nugroho">Risky Dimas Nugroho</h1>
-                <p class="job-title">UI/UX Designer</p>
-                <p class="hero-description">Creating beautiful digital experiences with passion and precision</p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View Projects</a>
-                    <a href="#contact" class="btn btn-secondary">Contact Me</a>
+    <!-- ================= HERO SECTION ================= -->
+    <section id="home" class="hero-section">
+        <!-- Cartoon Clouds on sides -->
+        <div class="hero-cloud left" aria-hidden="true">
+            <svg class="cloud-svg" width="130" height="75" viewBox="0 0 130 75" fill="none">
+                <path
+                    d="M35 70H105C118 70 128 60 128 47C128 35 119 25 107 24C105 10 93 0 78 0C65 0 54 8 50 20C46 17 40 15 35 15C21 15 10 26 10 40C4 44 0 52 0 60C0 66 4 70 12 70H35Z"
+                    fill="#FFFFFF" stroke="#000000" stroke-width="4" />
+            </svg>
+        </div>
+
+        <div class="hero-cloud right" aria-hidden="true">
+            <svg class="cloud-svg" width="140" height="80" viewBox="0 0 140 80" fill="none">
+                <path
+                    d="M40 75H115C128 75 138 65 138 52C138 40 128 30 116 29C113 13 100 0 83 0C70 0 58 9 54 22C50 18 44 16 38 16C23 16 11 28 11 43C5 47 0 56 0 64C0 71 5 75 14 75H40Z"
+                    fill="#FFFFFF" stroke="#000000" stroke-width="4" />
+            </svg>
+        </div>
+
+        <div class="container hero-wrapper">
+            <!-- Badge Tag -->
+            <div class="hero-badge-tag">
+                <i class="fas fa-bolt"></i>
+                <span>Available for Exciting Projects</span>
+            </div>
+
+            <!-- Massive Chunky Bubble Headline -->
+            <h1 class="hero-title">
+                <span class="bubble-highlight-blue">Risky Dimas Nugroho</span> is a<br>
+                <span class="bubble-highlight-yellow">Creative Designer</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Designing bold, playful & intuitive digital experiences that combine 90s Pop Art energy with modern
+                Neo-Brutalism to make people say "WOW!"
+            </p>
+
+            <!-- Center CTA Buttons -->
+            <div class="hero-cta-group">
+                <button type="button" class="btn btn-yellow cta-resume-btn open-resume-modal-btn">
+                    <i class="fas fa-file-download"></i>
+                    <span>Download Resume</span>
+                </button>
+                <a href="#projects" class="btn btn-rect">
+                    <span>Explore My Work</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Pop-Art Stickers & Doodles Array -->
+            <div class="hero-stickers-row" id="heroStickersRow">
+                <div class="sticker-badge sticker-thumbs">
+                    <span>👍</span>
+                    <span>100% COOL</span>
+                </div>
+                <div class="sticker-badge sticker-peace">
+                    <span>✌️</span>
+                    <span>PEACE & VIBES</span>
+                </div>
+                <div class="sticker-badge sticker-banner">
+                    <span>★</span>
+                    <span>"I Design it! And they like it"</span>
+                </div>
+                <div class="sticker-badge sticker-smiley">
+                    <span>😊</span>
+                    <span>STAY PLAYFUL</span>
+                </div>
+                <div class="sticker-badge sticker-start">
+                    <span>▶</span>
+                    <span>START</span>
+                </div>
+                <div class="sticker-badge sticker-hot">
+                    <span>🔥</span>
+                    <span>HOT STUFF</span>
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="mouse"></div>
-        </div>
+
+        <!-- Full-Width Red & White Checkered Ribbon Pattern -->
+        <div class="checkered-ribbon" aria-hidden="true"></div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
+    <!-- ================= ABOUT SECTION ================= -->
+    <section id="about" class="section-padding">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="image-placeholder">
-                        <i class="fas fa-user"></i>
-                        <p>Your Photo Here</p>
-                    </div>
-                </div>
-                <div class="about-text">
-                    <h3>Hello, I'm Risky!</h3>
-                    <p class="about-bio">
-                        Passionate UI/UX Designer focused on creating intuitive and visually appealing digital experiences. 
-                        I combine creativity with functionality to deliver designs that not only look great but also solve real problems.
-                    </p>
-                    <p class="about-bio">
-                        When I'm not designing, you can find me editing videos, exploring creative tools, or competing in esports tournaments.
-                    </p>
-                    <div class="about-stats">
-                        <div class="stat">
-                            <h4 id="projectCount">0+</h4>
-                            <p>Projects</p>
-                        </div>
-                        <div class="stat">
-                            <h4>4+</h4>
-                            <p>Skills</p>
-                        </div>
-                        <div class="stat">
-                            <h4>100%</h4>
-                            <p>Dedication</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="section-header">
+                <span class="section-tag">Get To Know Me</span>
+                <h2 class="section-title">A Little About Me</h2>
+                <p class="section-desc">Passionate creator blending thoughtful UI/UX logic with playful pop-art
+                    aesthetics.</p>
             </div>
-        </div>
-    </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">My Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fab fa-figma"></i>
+            <!-- Retro OS Window Container Layout -->
+            <div class="retro-window">
+                <div class="window-header">
+                    <div class="window-dots">
+                        <span class="window-dot dot-red"></span>
+                        <span class="window-dot dot-yellow"></span>
+                        <span class="window-dot dot-green"></span>
                     </div>
-                    <h3>Figma</h3>
-                    <p>UI/UX Design & Prototyping</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fas fa-video"></i>
+                    <span class="window-title">risky_os_v2.0 / about_me.exe</span>
+                    <div class="window-controls-retro">
+                        <span class="window-btn-retro">−</span>
+                        <span class="window-btn-retro">□</span>
+                        <span class="window-btn-retro">✕</span>
                     </div>
-                    <h3>CapCut</h3>
-                    <p>Video Editing & Content Creation</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fab fa-adobe"></i>
-                    </div>
-                    <h3>Photoshop</h3>
-                    <p>Photo Editing & Graphics</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <h3>Esports Player</h3>
-                    <p>Free Fire Competitive Gaming</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">My Projects</h2>
-            <div id="projectsGrid" class="projects-grid">
-                <!-- Projects will be loaded from Firebase -->
-                <div class="loading">Loading projects...</div>
-            </div>
-        </div>
-    </section>
+                <div class="window-body">
+                    <div class="about-grid">
+                        <!-- Profile Column -->
+                        <div class="about-card-profile">
+                            <div class="profile-avatar-frame">
+                                <img id="aboutAvatarImg"
+                                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
+                                    alt="Risky Dimas Nugroho">
+                            </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h4>Email</h4>
-                            <a href="mailto:riskydimasnu@gmail.com">riskydimasnu@gmail.com</a>
+                            <div class="about-badge-pills">
+                                <span class="about-badge stat-yellow">Creative Thinker 💡</span>
+                                <span class="about-badge stat-green">Pixel Obsessed 🎨</span>
+                                <span class="about-badge stat-pink">Esports Gamer 🎮</span>
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-yellow open-resume-modal-btn"
+                                style="width: 100%;">
+                                <i class="fas fa-file-alt"></i>
+                                <span>View Full Resume</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fab fa-whatsapp"></i>
-                        <div>
-                            <h4>WhatsApp</h4>
-                            <a href="https://wa.me/6281328959495" target="_blank">081328959495</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/ig.masterq?cplk=anR0d2s3eGlrNHZt" target="_blank" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://github.com/Masterq15" target="_blank" class="social-link">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/@masterqqq" target="_blank" class="social-link">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Risky Dimas Nugroho. All rights reserved.</p>
-            <p class="admin-link"><a href="admin.html">Admin Panel</a></p>
-        </div>
-    </footer>
+                        <!-- Biography & Stats Column -->
+                        <div class="about-bio-wrap">
+                            <div id="aboutBioParagraphs" class="about-bio-text">
+                                <p>
+                                    Hey there! I'm <strong>Risky Dimas Nugroho</strong>, a passionate UI/UX Designer and
+                                    frontend explorer based in Indonesia. I thrive on creating digital interfaces that
+                                    are not just clean and usable, but also brim with character, fun, and memorable
+                                    tactile feedback.
+                                </p>
+                                <p>
+                                    Whether it's designing mobile apps in Figma, crafting bespoke branding kits, or
+                                    writing crisp semantic code, my mission is always to deliver experiences that leave
+                                    a lasting positive impression.
+                                </p>
+                                <p>
+                                    When I'm away from design canvases, you'll find me editing fast-paced reels in
+                                    CapCut, exploring new design trends, or strategizing in esports battle arenas.
+                                </p>
+                            </div>
 
-    <!-- Firebase Configuration -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-        // Firebase configuration - GANTI INI NANTI dengan config kamu
-        const firebaseConfig = {
-           apiKey: "AIzaSyBXDmYyQjYI7RpSw9r5J1GYgZDiPhd-26E",
-           authDomain: "portfolio-riskydimasn.firebaseapp.com",
-           databaseURL: "https://portfolio-riskydimasn-default-rtdb.asia-southeast1.firebasedatabase.app",
-           projectId: "portfolio-riskydimasn",
-           storageBucket: "portfolio-riskydimasn.firebasestorage.app",
-           messagingSenderId: "1074691515560",
-           appId: "1:1074691515560:web:691ecd5e1c76bc19c9ce9d",
-           measurementId: "G-3DJXR6SWN6"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        // Load projects from Firebase
-        const projectsRef = ref(database, 'projects');
-        onValue(projectsRef, (snapshot) => {
-            const projectsGrid = document.getElementById('projectsGrid');
-            projectsGrid.innerHTML = '';
-
-            const data = snapshot.val();
-            if (data) {
-                const projects = Object.entries(data).map(([id, project]) => ({ id, ...project }));
-                
-                // Update project count
-                document.getElementById('projectCount').textContent = projects.length + '+';
-
-                projects.forEach(project => {
-                    const projectCard = `
-                        <div class="project-card">
-                            <div class="project-image">
-                                <img src="${project.image || 'https://via.placeholder.com/400x300?text=Project+Image'}" alt="${project.title}">
-                                <div class="project-overlay">
-                                    <h3>${project.title}</h3>
-                                    <p>${project.description}</p>
-                                    ${project.link ? `<a href="${project.link}" target="_blank" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>` : ''}
+                            <!-- Brutalist Personal Stats Cards -->
+                            <div class="stats-grid">
+                                <div class="stat-card stat-yellow">
+                                    <div class="stat-number" id="projectCountStat">15+</div>
+                                    <div class="stat-label">Projects Built</div>
+                                </div>
+                                <div class="stat-card stat-blue">
+                                    <div class="stat-number" id="achievementCountStat">8+</div>
+                                    <div class="stat-label">Achievements</div>
+                                </div>
+                                <div class="stat-card stat-green">
+                                    <div class="stat-number">100%</div>
+                                    <div class="stat-label">Dedication</div>
+                                </div>
+                                <div class="stat-card stat-pink">
+                                    <div class="stat-number">999+</div>
+                                    <div class="stat-label">Coffee Cups ☕</div>
                                 </div>
                             </div>
                         </div>
-                    `;
-                    projectsGrid.innerHTML += projectCard;
-                });
-            } else {
-                projectsGrid.innerHTML = '<p class="no-projects">No projects yet. Add some from the admin panel!</p>';
-            }
-        });
-    </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- ================= SKILLS SECTION ================= -->
+    <section id="skills" class="section-padding" style="background-color: var(--bg-card-alt);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Superpowers</span>
+                <h2 class="section-title">What I Can Do</h2>
+                <p class="section-desc">Hand-picked toolkit of design, frontend, and creative skills formatted as
+                    pop-art stickers.</p>
+            </div>
+
+            <!-- Skill Filter Pills -->
+            <div class="skills-filter-nav">
+                <button class="filter-btn skills-filter-btn active" data-filter="all">All Skills</button>
+                <button class="filter-btn skills-filter-btn" data-filter="design">UI/UX Design</button>
+                <button class="filter-btn skills-filter-btn" data-filter="frontend">Frontend</button>
+                <button class="filter-btn skills-filter-btn" data-filter="tools">Creative Tools</button>
+                <button class="filter-btn skills-filter-btn" data-filter="other">Other</button>
+            </div>
+
+            <!-- Skills Grid (Wobble on Hover) -->
+            <div class="skills-grid" id="skillsGrid">
+                <div class="skill-sticker-card skill-theme-yellow" data-category="design">
+                    <div class="skill-icon-wrap">
+                        <i class="fab fa-figma"></i>
+                    </div>
+                    <h3 class="skill-name">Figma</h3>
+                    <span class="skill-category-tag">UI/UX & Prototyping</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-blue" data-category="design">
+                    <div class="skill-icon-wrap">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 class="skill-name">Design Systems</h3>
+                    <span class="skill-category-tag">Tokens & Guidelines</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-pink" data-category="design">
+                    <div class="skill-icon-wrap">
+                        <i class="fas fa-mobile-screen"></i>
+                    </div>
+                    <h3 class="skill-name">Mobile UX</h3>
+                    <span class="skill-category-tag">iOS & Android Flows</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-orange" data-category="frontend">
+                    <div class="skill-icon-wrap">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <h3 class="skill-name">HTML5 / CSS3</h3>
+                    <span class="skill-category-tag">Responsive Layouts</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-yellow" data-category="frontend">
+                    <div class="skill-icon-wrap">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <h3 class="skill-name">JavaScript</h3>
+                    <span class="skill-category-tag">Interactivity & DOM</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-cyan" data-category="frontend">
+                    <div class="skill-icon-wrap">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3 class="skill-name">CSS Animations</h3>
+                    <span class="skill-category-tag">Micro-Interactions</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-purple" data-category="tools">
+                    <div class="skill-icon-wrap">
+                        <i class="fab fa-adobe"></i>
+                    </div>
+                    <h3 class="skill-name">Photoshop</h3>
+                    <span class="skill-category-tag">Visuals & Retouching</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-pink" data-category="tools">
+                    <div class="skill-icon-wrap">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="skill-name">CapCut Video</h3>
+                    <span class="skill-category-tag">Hype Reels & Editing</span>
+                </div>
+
+                <div class="skill-sticker-card skill-theme-green" data-category="other">
+                    <div class="skill-icon-wrap">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="skill-name">Esports Gaming</h3>
+                    <span class="skill-category-tag">Team Strategy & Focus</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ACHIEVEMENTS SECTION ================= -->
+    <section id="achievements" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Trophies & Milestones</span>
+                <h2 class="section-title">Little Wins, Big Dreams</h2>
+                <p class="section-desc">Milestones, awards, and certifications formatted like retro pop-art badges.</p>
+            </div>
+
+            <!-- Dynamic Achievements Grid -->
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Rendered dynamically by script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Skewed Checkered Ribbon Divider -->
+    <div class="checkered-ribbon skewed" aria-hidden="true"></div>
+
+    <!-- ================= PROJECTS SECTION ================= -->
+    <section id="projects" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Portfolio Showcase</span>
+                <h2 class="section-title">Things I've Made</h2>
+                <p class="section-desc">Curated collection displayed inside retro OS desktop window mockups.</p>
+            </div>
+
+            <!-- Project Filter Pills -->
+            <div class="projects-filter-nav">
+                <button class="filter-btn projects-filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn projects-filter-btn" data-filter="uiux">UI/UX Design</button>
+                <button class="filter-btn projects-filter-btn" data-filter="web">Web Development</button>
+                <button class="filter-btn projects-filter-btn" data-filter="branding">Branding</button>
+            </div>
+
+            <!-- Projects Grid (OS Windows) -->
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Rendered dynamically by script.js & synced with Firebase -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CONTACT SECTION ================= -->
+    <section id="contact" class="section-padding" style="background-color: var(--bg-card-alt);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Let's Connect</span>
+                <h2 class="section-title">Have a Project in Mind?</h2>
+                <p class="section-desc">Let's build something bold, playful, and genuinely memorable together!</p>
+            </div>
+
+            <div class="contact-wrapper">
+                <div class="contact-card-retro">
+                    <div class="contact-header-strip">
+                        <div class="window-dots">
+                            <span class="window-dot dot-red"></span>
+                            <span class="window-dot dot-yellow"></span>
+                            <span class="window-dot dot-green"></span>
+                        </div>
+                        <span class="contact-strip-title">📬 SEND_A_MESSAGE.EXE</span>
+                        <span class="sticker-badge sticker-hot" style="font-size: 0.75rem; padding: 4px 10px;">FAST
+                            REPLY</span>
+                    </div>
+
+                    <div class="contact-body">
+                        <!-- Direct Channels -->
+                        <div class="contact-intro-grid">
+                            <a href="mailto:riskydimasnu@gmail.com" class="contact-channel-card">
+                                <div class="contact-channel-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-channel-info">
+                                    <h4>Email Me</h4>
+                                    <p>riskydimasnu@gmail.com</p>
+                                </div>
+                            </a>
+
+                            <a href="https://wa.me/6281328959495" target="_blank" rel="noopener noreferrer"
+                                class="contact-channel-card">
+                                <div class="contact-channel-icon" style="background: var(--green-accent); color: #000;">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div class="contact-channel-info">
+                                    <h4>WhatsApp</h4>
+                                    <p>+62 813-2895-9495</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Brutalist Form -->
+                        <form id="contactForm" class="brutalist-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName" class="form-label">Your Name *</label>
+                                    <input type="text" id="contactName" class="form-control"
+                                        placeholder="e.g., Alex Rivers" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail" class="form-label">Your Email *</label>
+                                    <input type="email" id="contactEmail" class="form-control"
+                                        placeholder="name@company.com" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactMessage" class="form-label">Your Message *</label>
+                                <textarea id="contactMessage" class="form-control"
+                                    placeholder="Tell me about your project, idea, or just say hi..."
+                                    required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-yellow btn-rect btn-contact-submit">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Submit / Send Message</span>
+                            </button>
+                        </form>
+
+                        <!-- Social Media Icon Badges with Hover Bounce -->
+                        <div class="social-badges-row">
+                            <a href="https://www.instagram.com/ig.masterq" target="_blank" rel="noopener noreferrer"
+                                class="social-badge-btn" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://github.com/Masterq15" target="_blank" rel="noopener noreferrer"
+                                class="social-badge-btn" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://wa.me/6281328959495" target="_blank" rel="noopener noreferrer"
+                                class="social-badge-btn" aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/@masterqqq" target="_blank" rel="noopener noreferrer"
+                                class="social-badge-btn" aria-label="TikTok">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full-Width Checkered Ribbon Pattern -->
+    <div class="checkered-ribbon" aria-hidden="true"></div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer-retro">
+        <div class="container footer-inner">
+            <div class="footer-mascot-box">
+                <a href="#home" class="footer-logo-badge" title="Risky Dimas Nugroho" aria-label="Risky Dimas Home">
+                    <svg class="footer-brand-logo" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="footerRGradient" x1="105" y1="118" x2="360" y2="420" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#00D2FF" />
+                                <stop offset="30%" stop-color="#0080FF" />
+                                <stop offset="70%" stop-color="#244BFF" />
+                                <stop offset="100%" stop-color="#5E17EB" />
+                            </linearGradient>
+                            <filter id="rGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0080FF" flood-opacity="0.38"/>
+                            </filter>
+                        </defs>
+                        <path d="M105 118 H315 A87 87 0 0 1 315 292 H260 L358 418 H271 L131 238 H315 A33 33 0 0 0 315 172 H154 Z" fill="url(#footerRGradient)" filter="url(#rGlow)" />
+                    </svg>
+                </a>
+                <div class="footer-copy">
+                    <p>&copy; 2026 <strong>Risky Dimas Nugroho</strong>. All rights reserved.</p>
+                </div>
+            </div>
+
+            <button id="backToTopBtn" class="btn-back-to-top" aria-label="Scroll back to top">
+                <span>Back to Top</span>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- ================= INTERACTIVE RESUME MODAL ================= -->
+    <div id="resumeModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="resumeModalTitle">
+        <div class="modal-content-window">
+            <div class="modal-header">
+                <div class="window-dots">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                </div>
+                <span id="resumeModalTitle" class="window-title">resume_risky_dimas_nugroho.pdf</span>
+                <button type="button" id="closeResumeModalBtn" class="modal-close-btn"
+                    aria-label="Close modal">✕</button>
+            </div>
+
+            <div class="modal-body-resume">
+                <div class="resume-header-card">
+                    <h2 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 4px;">Risky Dimas
+                        Nugroho</h2>
+                    <p
+                        style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--primary-accent); font-weight: bold; margin-bottom: 12px;">
+                        Creative UI/UX Designer & Frontend Explorer</p>
+                    <p style="font-size: 0.95rem; color: var(--text-muted);"><i class="fas fa-envelope"></i>
+                        riskydimasnu@gmail.com &nbsp;|&nbsp; <i class="fas fa-phone"></i> +62 813-2895-9495
+                        &nbsp;|&nbsp; Indonesia</p>
+                </div>
+
+                <div class="resume-section-block">
+                    <h3 class="resume-section-title">Professional Summary</h3>
+                    <p style="font-size: 0.98rem; line-height: 1.7;">
+                        Dynamic UI/UX designer and creative frontend builder specializing in user-centric interfaces,
+                        design systems, and engaging micro-interactions. Proven track record in rapid prototyping,
+                        competitive esports team leadership, and content creation.
+                    </p>
+                </div>
+
+                <div class="resume-section-block">
+                    <h3 class="resume-section-title">Core Skills</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                        <span class="tech-tag">UI/UX Design</span>
+                        <span class="tech-tag">Figma & Prototyping</span>
+                        <span class="tech-tag">Wireframing</span>
+                        <span class="tech-tag">Design Systems</span>
+                        <span class="tech-tag">HTML5 / Vanilla CSS</span>
+                        <span class="tech-tag">JavaScript (ES6+)</span>
+                        <span class="tech-tag">Adobe Photoshop</span>
+                        <span class="tech-tag">CapCut Video Production</span>
+                    </div>
+                </div>
+
+                <div class="resume-section-block">
+                    <h3 class="resume-section-title">Key Projects & Achievements</h3>
+                    <div class="resume-item-row">
+                        <strong>Neon Pulse - Mobile Streaming Interface</strong>
+                        <span>Figma Design System • 2024</span>
+                    </div>
+                    <div class="resume-item-row">
+                        <strong>1st Place Winner - Regional Esports Championship</strong>
+                        <span>National Youth Gaming League • 2024</span>
+                    </div>
+                    <div class="resume-item-row">
+                        <strong>PixelCraft Studio Portfolio Web</strong>
+                        <span>Interactive Frontend Architecture • 2023</span>
+                    </div>
+                </div>
+
+                <div class="modal-actions-bar">
+                    <button type="button" id="printResumeBtn" class="btn btn-yellow btn-sm">
+                        <i class="fas fa-print"></i>
+                        <span>Print / Save PDF</span>
+                    </button>
+                    <a href="mailto:riskydimasnu@gmail.com?subject=Job%20Inquiry%20-%20Risky%20Dimas"
+                        class="btn btn-sm btn-rect">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Hire Me</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Interactive Engine -->
     <script src="script.js"></script>
 </body>
+
 </html>

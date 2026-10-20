@@ -1,67 +1,905 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Portfolio Manager</title>
+    <title>Admin Panel - Risky Dimas Portfolio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Admin Stylesheet -->
     <link rel="stylesheet" href="admin-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="admin-container">
-        <header class="admin-header">
-            <h1><i class="fas fa-cog"></i> Portfolio Admin Panel</h1>
-            <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
-        </header>
 
-        <div class="admin-content">
-            <!-- Add Project Form -->
-            <div class="admin-card">
-                <h2><i class="fas fa-plus-circle"></i> Add New Project</h2>
-                <form id="addProjectForm">
-                    <div class="form-group">
-                        <label for="projectTitle">Project Title *</label>
-                        <input type="text" id="projectTitle" required placeholder="e.g., E-commerce Mobile App">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="projectDescription">Description *</label>
-                        <textarea id="projectDescription" required rows="4" placeholder="Brief description of your project"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="projectImage">Image URL</label>
-                        <input type="url" id="projectImage" placeholder="https://example.com/image.jpg">
-                        <small>Paste image URL or leave empty for placeholder</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="projectLink">Project Link (Optional)</label>
-                        <input type="url" id="projectLink" placeholder="https://example.com">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Add Project
-                    </button>
-                </form>
+    <!-- ================= 1. LOGIN CONTAINER ================= -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-window">
+            <div class="window-header">
+                <div class="window-dots">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                </div>
+                <span class="window-title">security_gate // admin_login.exe</span>
+                <span class="window-btn-retro">🔒</span>
             </div>
 
-            <!-- Projects List -->
-            <div class="admin-card">
-                <h2><i class="fas fa-list"></i> Manage Projects</h2>
-                <div id="projectsList" class="projects-list">
-                    <div class="loading">Loading projects...</div>
+            <div class="login-body">
+                <div class="login-icon-badge">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h1 class="login-title">Admin Login</h1>
+                <p class="login-subtitle">Enter your Firebase credentials to access the portfolio dashboard</p>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail" class="form-label"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="loginEmail" class="form-control" required placeholder="admin@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword" class="form-label"><i class="fas fa-key"></i> Password</label>
+                        <input type="password" id="loginPassword" class="form-control" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="btn btn-yellow btn-rect" style="width: 100%; margin-top: 10px;">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login to Dashboard</span>
+                    </button>
+
+                    <div id="loginError" class="error-message"></div>
+                </form>
+
+                <div class="login-footer-link">
+                    <a href="index.html">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Portfolio Website</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase Configuration -->
+    <!-- ================= 2. COMPLETE ADMIN DASHBOARD LAYOUT ================= -->
+    <div id="adminContainer" class="admin-layout" style="display: none;">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-header">
+                <div class="brand-badge">
+                    <div class="brand-flower">R</div>
+                    <div class="brand-text">
+                        <h2>Admin Panel</h2>
+                        <span>PORTFOLIO OS v2.5</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button type="button" class="nav-item-btn active" data-tab="dashboard">
+                    <div class="nav-item-btn-left">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <span class="nav-counter-badge" id="sidebarOverviewTag">LIVE</span>
+                </button>
+
+                <button type="button" class="nav-item-btn" data-tab="projects">
+                    <div class="nav-item-btn-left">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Projects</span>
+                    </div>
+                    <span class="nav-counter-badge" id="sidebarProjectsCount">0</span>
+                </button>
+
+                <button type="button" class="nav-item-btn" data-tab="achievements">
+                    <div class="nav-item-btn-left">
+                        <i class="fas fa-award"></i>
+                        <span>Certificates</span>
+                    </div>
+                    <span class="nav-counter-badge" id="sidebarAchievementsCount">0</span>
+                </button>
+
+                <button type="button" class="nav-item-btn" data-tab="skills">
+                    <div class="nav-item-btn-left">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Tech Stack</span>
+                    </div>
+                    <span class="nav-counter-badge" id="sidebarSkillsCount">9</span>
+                </button>
+
+                <button type="button" class="nav-item-btn" data-tab="messages">
+                    <div class="nav-item-btn-left">
+                        <i class="fas fa-comments"></i>
+                        <span>Messages</span>
+                    </div>
+                    <span class="nav-counter-badge" id="sidebarMessagesCount" style="background: var(--pink-accent); color: #000;">0</span>
+                </button>
+
+                <button type="button" class="nav-item-btn" data-tab="profile">
+                    <div class="nav-item-btn-left">
+                        <i class="fas fa-user-gear"></i>
+                        <span>Profile Settings</span>
+                    </div>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="index.html" target="_blank" class="btn btn-sm btn-yellow" style="width: 100%;">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>View Live Website</span>
+                </a>
+                <button type="button" id="logoutBtn" class="btn btn-sm btn-danger" style="width: 100%;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN DASHBOARD CONTENT AREA -->
+        <main class="admin-main">
+            <!-- Top Sticky Bar -->
+            <header class="admin-top-bar">
+                <div class="top-bar-left">
+                    <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="date-pill-badge" id="currentDateDisplay">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Loading date...</span>
+                    </div>
+                </div>
+
+                <div class="top-bar-right">
+                    <button type="button" id="themeSwitchBtn" class="theme-switch-btn" title="Toggle Theme" aria-label="Toggle theme">
+                        <i id="themeIcon" class="fas fa-sun"></i>
+                    </button>
+
+                    <div class="user-status-pill">
+                        <span class="user-status-dot"></span>
+                        <span>Welcome, <strong id="userEmail">admin</strong></span>
+                    </div>
+
+                    <a href="index.html" class="btn btn-sm btn-rect" title="Go to Home">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Red & White Checkered Ribbon Separator -->
+            <div class="checkered-ribbon" aria-hidden="true"></div>
+
+            <!-- Page Content Container -->
+            <div class="admin-page-content">
+
+                <!-- ================= 1. TAB: DASHBOARD OVERVIEW ================= -->
+                <section class="tab-content active" id="dashboard-tab">
+                    <!-- Welcome Hero Banner -->
+                    <div class="welcome-hero-banner">
+                        <div class="welcome-text">
+                            <h1>Welcome back! 👋</h1>
+                            <p>Here's your real-time portfolio performance and visitor overview.</p>
+                        </div>
+                        <div class="status-badge-live">
+                            <span class="user-status-dot"></span>
+                            <span>DATABASE SYNCHRONIZED</span>
+                        </div>
+                    </div>
+
+                    <!-- 4 Neo-Brutalist Stat Cards (Matching User Reference) -->
+                    <div class="dashboard-stats-grid">
+                        <div class="stat-card-neo stat-red" data-jump="projects">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Total Projects</span>
+                                <div class="stat-icon-wrap">
+                                    <i class="fas fa-folder"></i>
+                                </div>
+                            </div>
+                            <div class="stat-number-big" id="dashProjectsCount">0</div>
+                            <div class="stat-growth-tag">
+                                <i class="fas fa-arrow-trend-up"></i>
+                                <span>Published & Live</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card-neo stat-green" data-jump="achievements">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Certificates</span>
+                                <div class="stat-icon-wrap">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                            </div>
+                            <div class="stat-number-big" id="dashAchievementsCount">0</div>
+                            <div class="stat-growth-tag">
+                                <i class="fas fa-arrow-trend-up"></i>
+                                <span>Trophies & Milestones</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card-neo stat-pink" data-jump="messages">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Total Inquiries</span>
+                                <div class="stat-icon-wrap">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                            </div>
+                            <div class="stat-number-big" id="dashMessagesCount">0</div>
+                            <div class="stat-growth-tag">
+                                <i class="fas fa-envelope-open-text"></i>
+                                <span>Contact Form Inbox</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card-neo stat-orange" data-jump="skills">
+                            <div class="stat-card-header">
+                                <span class="stat-card-label">Tech Stack</span>
+                                <div class="stat-icon-wrap">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                            </div>
+                            <div class="stat-number-big" id="dashSkillsCount">9</div>
+                            <div class="stat-growth-tag">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                <span>Design & Dev Arsenal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Master Sync Default Data to Firebase Card -->
+                    <div class="admin-card sync-hero-card" style="margin-bottom: 32px; background: linear-gradient(135deg, rgba(255, 230, 0, 0.2), rgba(30, 80, 255, 0.12)); border: 2.5px solid var(--border-color);">
+                        <div class="card-inner-body" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding: 20px 24px;">
+                            <div style="display: flex; align-items: center; gap: 16px; max-width: 680px;">
+                                <div style="width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--secondary-accent); border: var(--border-width-sm) solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: var(--shadow-xs); flex-shrink: 0; color: #000;">
+                                    <i class="fas fa-cloud-arrow-up"></i>
+                                </div>
+                                <div>
+                                    <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">Sinkronkan Data Default Website ke Database Firebase</h3>
+                                    <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">Masukkan 6 Projects & 4 Certificates default dari website ke database Firebase agar langsung muncul di input admin panel dan siap Anda edit/kelola!</p>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-yellow btn-rect" onclick="syncAllWebDefaultsToFirebase()" style="box-shadow: var(--shadow-sm); font-size: 1rem; padding: 12px 22px;">
+                                <i class="fas fa-sparkles"></i>
+                                <span>Masukkan Semua Data ke Database</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Two-column Activity & Quick Links -->
+                    <div class="dashboard-columns-grid">
+                        <!-- Recent Messages Activity -->
+                        <div class="admin-card">
+                            <div class="window-header">
+                                <div class="window-dots">
+                                    <span class="window-dot dot-red"></span>
+                                    <span class="window-dot dot-yellow"></span>
+                                    <span class="window-dot dot-green"></span>
+                                </div>
+                                <span class="window-title">inbox // recent_messages.log</span>
+                                <span class="window-btn-retro">💬</span>
+                            </div>
+
+                            <div class="card-inner-body">
+                                <h3 class="card-heading"><i class="fas fa-bell" style="color: var(--primary-accent);"></i> Recent Contact Form Activity</h3>
+                                <div id="dashRecentMessagesList">
+                                    <div class="loading">Loading inquiries...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Shortcuts & Actions -->
+                        <div class="admin-card">
+                            <div class="window-header">
+                                <div class="window-dots">
+                                    <span class="window-dot dot-red"></span>
+                                    <span class="window-dot dot-yellow"></span>
+                                    <span class="window-dot dot-green"></span>
+                                </div>
+                                <span class="window-title">system // quick_actions.exe</span>
+                                <span class="window-btn-retro">⚡</span>
+                            </div>
+
+                            <div class="card-inner-body">
+                                <h3 class="card-heading"><i class="fas fa-rocket" style="color: var(--primary-accent);"></i> Quick Actions</h3>
+                                <div style="display: flex; flex-direction: column; gap: 14px;">
+                                    <button type="button" class="btn btn-yellow btn-rect" style="width: 100%; justify-content: flex-start;" onclick="switchTab('projects')">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>Add New Portfolio Project</span>
+                                    </button>
+
+                                    <button type="button" class="btn btn-blue btn-rect" style="width: 100%; justify-content: flex-start;" onclick="switchTab('achievements')">
+                                        <i class="fas fa-trophy"></i>
+                                        <span>Add Certificate / Milestone</span>
+                                    </button>
+
+                                    <button type="button" class="btn btn-rect" style="width: 100%; justify-content: flex-start;" onclick="switchTab('skills')">
+                                        <i class="fas fa-layer-group"></i>
+                                        <span>Manage Tech Stack Badges</span>
+                                    </button>
+
+                                    <button type="button" class="btn btn-rect" style="width: 100%; justify-content: flex-start;" onclick="switchTab('profile')">
+                                        <i class="fas fa-user-edit"></i>
+                                        <span>Edit Profile, Bio & Social Links</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 2. TAB: PROJECTS ================= -->
+                <section class="tab-content" id="projects-tab">
+                    <!-- Add Project Window -->
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">projects // new_project.exe</span>
+                            <span class="window-btn-retro">＋</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <h2 class="card-heading" id="projectFormHeading"><i class="fas fa-plus-circle" style="color: var(--primary-accent);"></i> Add New Project</h2>
+                            <div id="projectEditBanner" style="display: none;" class="edit-mode-indicator"></div>
+                            <form id="addProjectForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="projectTitle" class="form-label">Project Title *</label>
+                                        <input type="text" id="projectTitle" class="form-control" required placeholder="e.g., Neon Pulse - Music Streaming App">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="projectCategory" class="form-label">Category *</label>
+                                        <select id="projectCategory" class="form-control" required>
+                                            <option value="uiux">UI/UX Design</option>
+                                            <option value="web">Web Development</option>
+                                            <option value="branding">Branding & Identity</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="projectDescription" class="form-label">Project Description *</label>
+                                    <textarea id="projectDescription" class="form-control" required rows="3" placeholder="Explain the project background, your role, and what makes it special..."></textarea>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="projectImage" class="form-label">Project Image URL *</label>
+                                        <input type="url" id="projectImage" class="form-control" required placeholder="https://images.unsplash.com/... or direct image link">
+                                        <span class="form-help">Paste image link for thumbnail preview</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="projectLink" class="form-label">Live Demo / External Link (Optional)</label>
+                                        <input type="url" id="projectLink" class="form-control" placeholder="https://github.com/... or Figma prototype link">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="projectTags" class="form-label">Tech Stack Tags (Comma separated)</label>
+                                    <input type="text" id="projectTags" class="form-control" placeholder="Figma, UI/UX, Design System, Mobile App">
+                                </div>
+
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <button type="submit" id="projectSubmitBtn" class="btn btn-yellow btn-rect">
+                                        <i class="fas fa-save"></i>
+                                        <span>Save & Publish Project</span>
+                                    </button>
+                                    <button type="button" id="cancelProjectEditBtn" class="btn btn-rect" style="display: none; background: #e2e8f0; color: #000;">
+                                        <i class="fas fa-times"></i>
+                                        <span>Cancel Edit</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Manage Projects List -->
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">projects // database_records.db</span>
+                            <span class="window-btn-retro">📁</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                                <h2 class="card-heading" style="margin-bottom: 0;"><i class="fas fa-list-check" style="color: var(--primary-accent);"></i> Manage Published Projects</h2>
+                                <button type="button" id="importProjectsBtn" class="btn btn-sm btn-yellow" title="Masukkan 6 project default website ke Firebase" onclick="seedProjectsToFirebase()">
+                                    <i class="fas fa-cloud-arrow-up"></i>
+                                    <span>Sync / Import 6 Default Projects to Firebase</span>
+                                </button>
+                            </div>
+                            <div id="projectsList" class="projects-list">
+                                <div class="loading">Loading database projects...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 3. TAB: CERTIFICATES & ACHIEVEMENTS ================= -->
+                <section class="tab-content" id="achievements-tab">
+                    <!-- Add Certificate Window -->
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">certificates // new_entry.exe</span>
+                            <span class="window-btn-retro">🎖️</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <h2 class="card-heading" id="achievementFormHeading"><i class="fas fa-award" style="color: var(--primary-accent);"></i> Add New Certificate / Achievement</h2>
+                            <div id="achievementEditBanner" style="display: none;" class="edit-mode-indicator"></div>
+                            <form id="addAchievementForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="achievementTitle" class="form-label">Award / Certificate Title *</label>
+                                        <input type="text" id="achievementTitle" class="form-control" required placeholder="e.g., 1st Place Regional Esports Championship">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="achievementOrg" class="form-label">Issuing Organization / Event *</label>
+                                        <input type="text" id="achievementOrg" class="form-control" required placeholder="e.g., National Youth Gaming League">
+                                    </div>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="achievementDate" class="form-label">Year / Date *</label>
+                                        <input type="text" id="achievementDate" class="form-control" required placeholder="e.g., 2024">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="achievementIcon" class="form-label">Badge Icon (Font Awesome)</label>
+                                        <select id="achievementIcon" class="form-control">
+                                            <option value="fa-trophy">🏆 Trophy (fa-trophy)</option>
+                                            <option value="fa-award">🎖️ Award (fa-award)</option>
+                                            <option value="fa-certificate">📜 Certificate (fa-certificate)</option>
+                                            <option value="fa-medal">🥇 Medal (fa-medal)</option>
+                                            <option value="fa-fire">🔥 Fire / Viral (fa-fire)</option>
+                                            <option value="fa-star">⭐ Star (fa-star)</option>
+                                            <option value="fa-gamepad">🎮 Esports (fa-gamepad)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="achievementImage" class="form-label">Photo / Certificate Image URL (Optional)</label>
+                                    <input type="url" id="achievementImage" class="form-control" placeholder="https://images.unsplash.com/... or Imgur direct link">
+                                    <span class="form-help">Paste image link for certificate, trophy, or winner photo</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="achievementDesc" class="form-label">Description *</label>
+                                    <textarea id="achievementDesc" class="form-control" required rows="3" placeholder="Briefly describe this milestone, role, or award..."></textarea>
+                                </div>
+
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <button type="submit" id="achievementSubmitBtn" class="btn btn-yellow btn-rect">
+                                        <i class="fas fa-save"></i>
+                                        <span>Add Certificate</span>
+                                    </button>
+                                    <button type="button" id="cancelAchievementEditBtn" class="btn btn-rect" style="display: none; background: #e2e8f0; color: #000;">
+                                        <i class="fas fa-times"></i>
+                                        <span>Cancel Edit</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Manage Certificates List -->
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">certificates // records.db</span>
+                            <span class="window-btn-retro">🏆</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                                <h2 class="card-heading" style="margin-bottom: 0;"><i class="fas fa-list" style="color: var(--primary-accent);"></i> Manage Certificates & Milestones</h2>
+                                <button type="button" id="importAchievementsBtn" class="btn btn-sm btn-yellow" title="Masukkan 4 certificate default website ke Firebase" onclick="seedAchievementsToFirebase()">
+                                    <i class="fas fa-cloud-arrow-up"></i>
+                                    <span>Sync / Import 4 Default Certificates to Firebase</span>
+                                </button>
+                            </div>
+                            <div id="achievementsList" class="projects-list">
+                                <div class="loading">Loading achievements...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 4. TAB: TECH STACK / SKILLS ================= -->
+                <section class="tab-content" id="skills-tab">
+                    <!-- Add Skill Window -->
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">skills // new_tech_badge.exe</span>
+                            <span class="window-btn-retro">⚡</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <h2 class="card-heading" id="skillFormHeading"><i class="fas fa-layer-group" style="color: var(--primary-accent);"></i> Add New Tech Stack / Skill Badge</h2>
+                            <div id="skillEditBanner" style="display: none;" class="edit-mode-indicator"></div>
+                            <form id="addSkillForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="skillName" class="form-label">Skill Name *</label>
+                                        <input type="text" id="skillName" class="form-control" required placeholder="e.g., Figma, React, Blender">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="skillSubtitle" class="form-label">Subtitle / Sub-label *</label>
+                                        <input type="text" id="skillSubtitle" class="form-control" placeholder="e.g., UI/UX & Prototyping, Responsive Layouts">
+                                        <span class="form-help">Text that appears beneath the skill title on the website card</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="skillCategory" class="form-label">Category *</label>
+                                        <select id="skillCategory" class="form-control" required>
+                                            <option value="design">UI/UX Design</option>
+                                            <option value="frontend">Frontend Development</option>
+                                            <option value="tools">Creative Tools</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="skillTheme" class="form-label">Color Accent *</label>
+                                        <select id="skillTheme" class="form-control" required>
+                                            <option value="yellow">Canary Yellow 🟨</option>
+                                            <option value="blue">Electric Blue 🟦</option>
+                                            <option value="pink">Hot Pink 🌸</option>
+                                            <option value="green">Mint Green 🟩</option>
+                                            <option value="purple">Vivid Purple 🟪</option>
+                                            <option value="orange">Neon Orange 🟧</option>
+                                            <option value="cyan">Cyber Cyan 🔷</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Logo Options: Preset Dropdown OR Custom Image Link -->
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="skillPresetIcon" class="form-label">1. Pilih Logo / Ikon Populer</label>
+                                        <select id="skillPresetIcon" class="form-control">
+                                            <option value="fab fa-figma">🎨 Figma (fab fa-figma)</option>
+                                            <option value="fas fa-layer-group">📐 Design Systems (fas fa-layer-group)</option>
+                                            <option value="fas fa-mobile-screen">📱 Mobile UX (fas fa-mobile-screen)</option>
+                                            <option value="fab fa-html5">🌐 HTML5 (fab fa-html5)</option>
+                                            <option value="fab fa-css3-alt">🎨 CSS3 (fab fa-css3-alt)</option>
+                                            <option value="fab fa-js">⚡ JavaScript (fab fa-js)</option>
+                                            <option value="fab fa-react">⚛️ React (fab fa-react)</option>
+                                            <option value="fas fa-wand-magic-sparkles">✨ CSS Animations (fas fa-wand-magic-sparkles)</option>
+                                            <option value="fab fa-adobe">🟦 Photoshop / Adobe (fab fa-adobe)</option>
+                                            <option value="fas fa-video">🎬 CapCut / Video (fas fa-video)</option>
+                                            <option value="fas fa-gamepad">🎮 Esports Gaming (fas fa-gamepad)</option>
+                                            <option value="fab fa-python">🐍 Python (fab fa-python)</option>
+                                            <option value="fab fa-node-js">🟢 Node.js (fab fa-node-js)</option>
+                                            <option value="fab fa-github">🐙 Git / GitHub (fab fa-github)</option>
+                                            <option value="fas fa-code">💻 Code / Development (fas fa-code)</option>
+                                            <option value="fas fa-paint-brush">🖌️ Illustration / Art (fas fa-paint-brush)</option>
+                                            <option value="fas fa-cube">🧊 3D / Blender (fas fa-cube)</option>
+                                            <option value="fas fa-star">⭐ Star Badge (fas fa-star)</option>
+                                            <option value="custom">✏️ Custom FontAwesome Icon</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="skillImage" class="form-label">2. ATAU Link Logo Gambar URL (SVG/PNG)</label>
+                                        <input type="url" id="skillImage" class="form-control" placeholder="https://cdn.simpleicons.org/figma or direct PNG/SVG link">
+                                        <span class="form-help">Jika diisi, logo gambar SVG/PNG ini yang akan ditampilkan!</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="customIconGroup" style="display: none;">
+                                    <label for="skillCustomIcon" class="form-label">Custom FontAwesome Class</label>
+                                    <input type="text" id="skillCustomIcon" class="form-control" placeholder="e.g. fas fa-gem, fab fa-vuejs">
+                                </div>
+
+                                <!-- Live Interactive Preview -->
+                                <div class="form-group">
+                                    <label class="form-label">Live Preview Badge:</label>
+                                    <div id="skillLivePreviewBox" style="display: inline-flex; align-items: center; gap: 16px; padding: 14px 22px; background: var(--bg-card); border: var(--border-width) solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                                        <div id="previewIconWrap" style="width: 54px; height: 54px; border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); background: var(--secondary-accent); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: var(--shadow-xs);">
+                                            <i id="previewIconEl" class="fab fa-figma"></i>
+                                            <img id="previewImgEl" src="" alt="preview" style="display: none; width: 34px; height: 34px; object-fit: contain;">
+                                        </div>
+                                        <div>
+                                            <h4 id="previewTitleEl" style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; margin-bottom: 2px;">Figma</h4>
+                                            <span id="previewSubtitleEl" style="font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">UI/UX & Prototyping</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 10px;">
+                                    <button type="submit" id="skillSubmitBtn" class="btn btn-yellow btn-rect">
+                                        <i class="fas fa-save"></i>
+                                        <span>Add Skill to Tech Stack</span>
+                                    </button>
+                                    <button type="button" id="cancelSkillEditBtn" class="btn btn-rect" style="display: none; background: #e2e8f0; color: #000;">
+                                        <i class="fas fa-times"></i>
+                                        <span>Cancel Edit</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Manage Skills List -->
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">skills // arsenal_records.db</span>
+                            <span class="window-btn-retro">🛠️</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+                                <h2 class="card-heading" style="margin-bottom: 0;"><i class="fas fa-wand-magic-sparkles" style="color: var(--primary-accent);"></i> Manage Skills Arsenal</h2>
+                                <button type="button" id="importDefaultsBtn" class="btn btn-sm btn-yellow">
+                                    <i class="fas fa-cloud-arrow-up"></i>
+                                    <span>Sync / Import 9 Default Web Skills to Firebase</span>
+                                </button>
+                            </div>
+                            <div id="skillsList" class="projects-list">
+                                <div class="loading">Loading skills...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 5. TAB: COMMENTS & MESSAGES INBOX ================= -->
+                <section class="tab-content" id="messages-tab">
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">inbox // visitor_inquiries.db</span>
+                            <span class="window-btn-retro">📬</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <h2 class="card-heading"><i class="fas fa-inbox" style="color: var(--primary-accent);"></i> Visitor Messages & Inquiries</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 24px;">All inquiries submitted through your portfolio contact form appear here in real-time.</p>
+                            
+                            <div id="messagesList">
+                                <div class="loading">Loading messages...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= 6. TAB: PROFILE SETTINGS ================= -->
+                <section class="tab-content" id="profile-tab">
+                    <div class="admin-card">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="window-dot dot-red"></span>
+                                <span class="window-dot dot-yellow"></span>
+                                <span class="window-dot dot-green"></span>
+                            </div>
+                            <span class="window-title">profile // identity_manager.exe</span>
+                            <span class="window-btn-retro">👤</span>
+                        </div>
+
+                        <div class="card-inner-body">
+                            <h2 class="card-heading"><i class="fas fa-user-pen" style="color: var(--primary-accent);"></i> Complete Portfolio Profile Settings</h2>
+                            <form id="updateProfileForm">
+                                <!-- Hero Titles -->
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="profileName" class="form-label">Full Name *</label>
+                                        <input type="text" id="profileName" class="form-control" required placeholder="Risky Dimas Nugroho">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profileRole" class="form-label">Headline Role Title *</label>
+                                        <input type="text" id="profileRole" class="form-control" required placeholder="Creative Designer">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileTagline" class="form-label">Hero Subtitle / Tagline *</label>
+                                    <textarea id="profileTagline" class="form-control" rows="2" placeholder="Designing bold, playful & intuitive digital experiences that make people say 'WOW!'"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profilePhoto" class="form-label">Profile Photo URL *</label>
+                                    <input type="url" id="profilePhoto" class="form-control" required placeholder="https://images.unsplash.com/... or direct image link">
+                                    <span class="form-help">Direct URL to your avatar photo</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileBio" class="form-label">Biography Paragraphs *</label>
+                                    <textarea id="profileBio" class="form-control" required rows="5" placeholder="Write your playful biography here... Separate paragraphs with enter."></textarea>
+                                </div>
+
+                                <!-- Contact Info -->
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="profileEmail" class="form-label">Contact Email</label>
+                                        <input type="email" id="profileEmail" class="form-control" placeholder="riskydimasnu@gmail.com">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profileWhatsapp" class="form-label">WhatsApp Number / Link</label>
+                                        <input type="text" id="profileWhatsapp" class="form-control" placeholder="+62 813-2895-9495">
+                                    </div>
+                                </div>
+
+                                <!-- Fun Stats Numbers -->
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="statProjects" class="form-label">Stat: Projects Completed</label>
+                                        <input type="text" id="statProjects" class="form-control" placeholder="15+">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="statAchievements" class="form-label">Stat: Achievements</label>
+                                        <input type="text" id="statAchievements" class="form-control" placeholder="8+">
+                                    </div>
+                                </div>
+
+                                <!-- Brand Logo, Hero Tag & Stickers -->
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="profileLogoText" class="form-label"><i class="fas fa-font" style="color: var(--primary-accent);"></i> Navbar Logo Letter / Monogram</label>
+                                        <input type="text" id="profileLogoText" class="form-control" value="R" placeholder="R" maxlength="4">
+                                        <span class="form-help">Huruf/inisial logo yang berputar di navbar (misal: R)</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profileBadgeTag" class="form-label"><i class="fas fa-bolt" style="color: var(--secondary-accent);"></i> Hero Availability Tag</label>
+                                        <input type="text" id="profileBadgeTag" class="form-control" value="Available for Exciting Projects" placeholder="Available for Exciting Projects">
+                                        <span class="form-help">Badge status di atas headline home</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileStickers" class="form-label"><i class="fas fa-tags" style="color: var(--pink-accent);"></i> Hero Pop-Art Stickers & Badges</label>
+                                    <textarea id="profileStickers" class="form-control" rows="3" placeholder="Contoh: 👍 100% COOL, ✌️ PEACE & VIBES, 🔥 HOT STUFF">👍 100% COOL, ✌️ PEACE & VIBES, ★ "I Design it! And they like it", 😊 STAY PLAYFUL, ▶ START, 🔥 HOT STUFF</textarea>
+                                    <span class="form-help">Teks stiker asli sudah terisi di dalam kotak ini. Kamu bisa edit, tambah, atau hapus teksnya langsung!</span>
+                                </div>
+
+                                <button type="submit" class="btn btn-yellow btn-rect">
+                                    <i class="fas fa-save"></i>
+                                    <span>Save & Sync Profile to Website</span>
+                                </button>
+                            </form>
+
+                            <!-- Live Database Preview Card -->
+                            <div class="profile-preview-card">
+                                <h3><i class="fas fa-sparkles"></i> Live Database Profile Snapshot</h3>
+                                <div id="currentProfile">
+                                    <p class="loading">Loading current profile data...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Red & White Checkered Ribbon Bottom Accent -->
+    <div class="checkered-ribbon" aria-hidden="true"></div>
+
+    <!-- ================= FIREBASE REALTIME ENGINE ================= -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getDatabase, ref, push, set, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-        // Firebase configuration - GANTI INI NANTI dengan config kamu
+        // 1. Theme Toggle System
+        const themeSwitchBtn = document.getElementById('themeSwitchBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const savedTheme = localStorage.getItem('porto_theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeSwitchBtn) {
+            themeSwitchBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                const next = current === 'light' ? 'dark' : 'light';
+                setTheme(next);
+            });
+        }
+
+        function setTheme(t) {
+            document.documentElement.setAttribute('data-theme', t);
+            localStorage.setItem('porto_theme', t);
+            if (themeIcon) {
+                themeIcon.className = t === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+
+        // 2. Dynamic Current Date Display
+        function updateDateDisplay() {
+            const dateEl = document.getElementById('currentDateDisplay');
+            if (dateEl) {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateEl.innerHTML = `<i class="far fa-calendar-alt"></i> <span>${now.toLocaleDateString('en-US', options)}</span>`;
+            }
+        }
+        updateDateDisplay();
+
+        // 3. Mobile Sidebar Toggle
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const adminSidebar = document.getElementById('adminSidebar');
+        if (sidebarToggleBtn && adminSidebar) {
+            sidebarToggleBtn.addEventListener('click', () => {
+                adminSidebar.classList.toggle('sidebar-open');
+            });
+        }
+
+        // 4. Tab Navigation System
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.nav-item-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            const targetBtn = document.querySelector(`.nav-item-btn[data-tab="${tabName}"]`);
+            const targetContent = document.getElementById(tabName + '-tab');
+
+            if (targetBtn) targetBtn.classList.add('active');
+            if (targetContent) targetContent.classList.add('active');
+
+            if (adminSidebar) adminSidebar.classList.remove('sidebar-open');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        document.querySelectorAll('.nav-item-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                switchTab(tab);
+            });
+        });
+
+        // Quick jump cards on dashboard
+        document.querySelectorAll('[data-jump]').forEach(el => {
+            el.addEventListener('click', () => {
+                const tab = el.getAttribute('data-jump');
+                switchTab(tab);
+            });
+        });
+
+        // 5. Firebase Configuration
         const firebaseConfig = {
              apiKey: "AIzaSyBXDmYyQjYI7RpSw9r5J1GYgZDiPhd-26E",
              authDomain: "portfolio-riskydimasn.firebaseapp.com",
@@ -73,135 +911,1310 @@
              measurementId: "G-3DJXR6SWN6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const auth = getAuth(app);
+
         const projectsRef = ref(database, 'projects');
+        const achievementsRef = ref(database, 'achievements');
+        const skillsRef = ref(database, 'skills');
+        const messagesRef = ref(database, 'messages');
+        const profileRef = ref(database, 'profile');
 
-        // Add Project
-        document.getElementById('addProjectForm').addEventListener('submit', (e) => {
-            e.preventDefault();
+        const loginContainer = document.getElementById('loginContainer');
+        const adminContainer = document.getElementById('adminContainer');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userEmailSpan = document.getElementById('userEmail');
 
-            const projectData = {
-                title: document.getElementById('projectTitle').value,
-                description: document.getElementById('projectDescription').value,
-                image: document.getElementById('projectImage').value || 'https://via.placeholder.com/400x300?text=Project+Image',
-                link: document.getElementById('projectLink').value,
-                createdAt: Date.now()
-            };
-
-            push(projectsRef, projectData)
-                .then(() => {
-                    showNotification('Project added successfully!', 'success');
-                    document.getElementById('addProjectForm').reset();
-                })
-                .catch((error) => {
-                    showNotification('Error: ' + error.message, 'error');
-                });
+        // 6. Authentication State Listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginContainer.style.display = 'none';
+                adminContainer.style.display = 'flex';
+                userEmailSpan.textContent = user.email;
+            } else {
+                loginContainer.style.display = 'flex';
+                adminContainer.style.display = 'none';
+            }
         });
 
-        // Load and Display Projects
-        onValue(projectsRef, (snapshot) => {
-            const projectsList = document.getElementById('projectsList');
-            projectsList.innerHTML = '';
+        // Login Handler
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
+                showNotification('Welcome back! Login successful! 🚀', 'success');
+                loginError.textContent = '';
+            } catch (error) {
+                let msg = 'Login failed! Check your credentials.';
+                if (error.code === 'auth/user-not-found') msg = 'User not found';
+                else if (error.code === 'auth/wrong-password') msg = 'Wrong password';
+                else if (error.code === 'auth/invalid-email') msg = 'Invalid email';
+                loginError.textContent = msg;
+                showNotification(msg, 'error');
+            }
+        });
 
-            const data = snapshot.val();
-            if (data) {
-                Object.entries(data).forEach(([id, project]) => {
-                    const projectItem = document.createElement('div');
-                    projectItem.className = 'project-item';
-                    projectItem.innerHTML = `
+        // Logout Handler
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showNotification('Logged out successfully! 👋', 'success');
+            } catch (error) {
+                showNotification('Error: ' + error.message, 'error');
+            }
+        });
+
+        // 7. DEFAULT PORTFOLIO DATA (Synchronized from Website)
+        const DEFAULT_PROJECTS = [
+            {
+                id: "proj-1",
+                title: "Neon Pulse - Music Streaming App",
+                category: "uiux",
+                categoryLabel: "UI/UX Design",
+                description: "A cyberpunk-infused, neo-brutalist mobile interface designed for Gen-Z audio enthusiasts. Features haptic visual waveforms and custom sticker playlists.",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                tags: ["Figma", "UI/UX", "Design System", "Mobile App"],
+                link: "https://www.figma.com"
+            },
+            {
+                id: "proj-2",
+                title: "PixelCraft - Retro Game Studio Web",
+                category: "web",
+                categoryLabel: "Web Development",
+                description: "An interactive studio portfolio featuring isometric 90s arcade mockups, fluid scroll physics, and custom pop-art stickers.",
+                image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+                tags: ["HTML5", "CSS3", "JavaScript", "Animation"],
+                link: "https://github.com/Masterq15"
+            },
+            {
+                id: "proj-3",
+                title: "BiteBox - Pop Food Delivery Brand",
+                category: "branding",
+                categoryLabel: "Branding & Identity",
+                description: "Comprehensive visual branding, vector mascots, packaging designs, and high-conversion mobile onboarding screens for a viral street-food startup.",
+                image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80",
+                tags: ["Illustrator", "Photoshop", "Brand Book", "Merch"],
+                link: "https://www.instagram.com/ig.masterq"
+            },
+            {
+                id: "proj-4",
+                title: "Vortex - Esports Tournament Dashboard",
+                category: "uiux",
+                categoryLabel: "UI/UX Design",
+                description: "High-adrenaline gamer stats dashboard tracking real-time match analytics, kill feeds, and tournament leaderboards with custom dark mode brutalism.",
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                tags: ["Figma", "Design System", "Gaming UX", "Data Viz"],
+                link: "https://github.com/Masterq15"
+            },
+            {
+                id: "proj-5",
+                title: "ChromaKit - Neo-Brutalist UI Kit",
+                category: "branding",
+                categoryLabel: "UI/UX & Branding",
+                description: "Open-source Figma component system with 120+ modular stickers, buttons, OS dialogs, and brutalist color palettes downloaded by 4,000+ designers.",
+                image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
+                tags: ["Figma Community", "Tokens", "UI Kit", "Vector Art"],
+                link: "https://www.figma.com"
+            },
+            {
+                id: "proj-6",
+                title: "KopiSenja - Artisan Cafe E-Commerce",
+                category: "web",
+                categoryLabel: "Web Design",
+                description: "A warm, aesthetic digital storefront for Indonesian specialty beans with an interactive brew calculator and seamless checkout flow.",
+                image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+                tags: ["UI/UX", "Responsive Web", "Vanilla JS", "Micro-copy"],
+                link: "https://github.com/Masterq15"
+            }
+        ];
+
+        const DEFAULT_ACHIEVEMENTS = [
+            {
+                id: "ach-1",
+                title: "1st Place Winner - Regional Esports Championship",
+                organization: "National Youth Gaming League",
+                date: "2024",
+                icon: "fa-trophy",
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                description: "Led team tactics, communication strategy, and game-sense execution to triumph over 64 competing teams in the grand final."
+            },
+            {
+                id: "ach-2",
+                title: "Top UI/UX Design Showcase Award",
+                organization: "Creative Digital Creators Expo",
+                date: "2023",
+                icon: "fa-award",
+                image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+                description: "Recognized for high-impact visual design innovation and accessible component architecture in student portfolio competition."
+            },
+            {
+                id: "ach-3",
+                title: "Certified Professional in UX Research & Design",
+                organization: "Digital Skill Academy",
+                date: "2023",
+                icon: "fa-certificate",
+                image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+                description: "Completed intensive design sprint covering wireframing, heuristic evaluation, usability testing, and interactive prototyping."
+            },
+            {
+                id: "ach-4",
+                title: "CapCut Creator Milestone - 100K+ Video Views",
+                organization: "Social Media Creative Community",
+                date: "2022",
+                icon: "fa-fire",
+                image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80",
+                description: "Produced aesthetic design breakdown reels and editing tutorials reaching over 100,000 organic impressions across TikTok and Instagram."
+            }
+        ];
+
+        const DEFAULT_SKILLS = [
+            { name: "Figma", category: "design", categoryLabel: "UI/UX & Prototyping", subtitle: "UI/UX & Prototyping", icon: "fab fa-figma", image: "", theme: "yellow" },
+            { name: "Design Systems", category: "design", categoryLabel: "Tokens & Guidelines", subtitle: "Tokens & Guidelines", icon: "fas fa-layer-group", image: "", theme: "blue" },
+            { name: "Mobile UX", category: "design", categoryLabel: "iOS & Android Flows", subtitle: "iOS & Android Flows", icon: "fas fa-mobile-screen", image: "", theme: "pink" },
+            { name: "HTML5 / CSS3", category: "frontend", categoryLabel: "Responsive Layouts", subtitle: "Responsive Layouts", icon: "fab fa-html5", image: "", theme: "orange" },
+            { name: "JavaScript", category: "frontend", categoryLabel: "Interactivity & DOM", subtitle: "Interactivity & DOM", icon: "fab fa-js", image: "", theme: "yellow" },
+            { name: "CSS Animations", category: "frontend", categoryLabel: "Micro-Interactions", subtitle: "Micro-Interactions", icon: "fas fa-wand-magic-sparkles", image: "", theme: "cyan" },
+            { name: "Photoshop", category: "tools", categoryLabel: "Visuals & Retouching", subtitle: "Visuals & Retouching", icon: "fab fa-adobe", image: "", theme: "purple" },
+            { name: "CapCut Video", category: "tools", categoryLabel: "Hype Reels & Editing", subtitle: "Hype Reels & Editing", icon: "fas fa-video", image: "", theme: "pink" },
+            { name: "Esports Gaming", category: "other", categoryLabel: "Team Strategy & Focus", subtitle: "Team Strategy & Focus", icon: "fas fa-gamepad", image: "", theme: "green" }
+        ];
+
+        window.seedSkillsToFirebase = async (silent = false) => {
+            try {
+                for (const s of DEFAULT_SKILLS) {
+                    await push(skillsRef, { ...s, createdAt: Date.now() });
+                }
+                if (!silent) showNotification('Semua 9 skill default berhasil dimasukkan ke Firebase! ⚡', 'success');
+            } catch (err) {
+                if (!silent) showNotification('Gagal sync skills: ' + err.message, 'error');
+                throw err;
+            }
+        };
+
+        // MASTER SYNC - Seed all web defaults to Firebase
+        window.syncAllWebDefaultsToFirebase = async () => {
+            try {
+                showNotification('Sedang memasukkan data website ke Firebase... ⏳', 'info');
+                await window.seedProjectsToFirebase(true);
+                await window.seedAchievementsToFirebase(true);
+                await window.seedSkillsToFirebase(true);
+                showNotification('Semua data website (Projects, Certificates & Skills) berhasil masuk ke database! 🚀', 'success');
+            } catch (err) {
+                showNotification('Gagal sync: ' + err.message, 'error');
+            }
+        };
+
+        // 7. PROJECTS - Add, Edit, Delete & Listen
+        let editingProjectId = null;
+        let cachedProjects = {};
+
+        window.editProject = (id) => {
+            const p = cachedProjects[id];
+            if (!p) return;
+            editingProjectId = id;
+
+            document.getElementById('projectTitle').value = p.title || '';
+            document.getElementById('projectCategory').value = p.category || 'uiux';
+            document.getElementById('projectDescription').value = p.description || '';
+            document.getElementById('projectImage').value = p.image || '';
+            document.getElementById('projectLink').value = (p.link && p.link !== '#') ? p.link : '';
+            document.getElementById('projectTags').value = p.tags ? (Array.isArray(p.tags) ? p.tags.join(', ') : p.tags) : '';
+
+            const heading = document.getElementById('projectFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-pencil-alt" style="color: var(--secondary-accent);"></i> Edit Project: ' + p.title;
+
+            const submitBtn = document.getElementById('projectSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> <span>Update & Save Project</span>';
+
+            const cancelBtn = document.getElementById('cancelProjectEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const banner = document.getElementById('projectEditBanner');
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div>
+                        <strong style="font-family: var(--font-display);"><i class="fas fa-pencil-alt"></i> Mode Edit:</strong>
+                        <span style="font-size: 0.9rem; margin-left: 6px;">Sedang mengedit project "<strong>${p.title}</strong>"</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-yellow" onclick="cancelProjectEdit()" style="padding: 4px 12px; font-size: 0.78rem;">Batal</button>
+                `;
+            }
+
+            document.getElementById('addProjectForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.editDefaultProject = (idx) => {
+            const p = DEFAULT_PROJECTS[idx];
+            if (!p) return;
+            editingProjectId = null;
+
+            document.getElementById('projectTitle').value = p.title || '';
+            document.getElementById('projectCategory').value = p.category || 'uiux';
+            document.getElementById('projectDescription').value = p.description || '';
+            document.getElementById('projectImage').value = p.image || '';
+            document.getElementById('projectLink').value = (p.link && p.link !== '#') ? p.link : '';
+            document.getElementById('projectTags').value = Array.isArray(p.tags) ? p.tags.join(', ') : p.tags;
+
+            const heading = document.getElementById('projectFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-magic" style="color: var(--primary-accent);"></i> Edit & Publish Default Project: ' + p.title;
+
+            const submitBtn = document.getElementById('projectSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> <span>Simpan Project Ini ke Database</span>';
+
+            const cancelBtn = document.getElementById('cancelProjectEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const banner = document.getElementById('projectEditBanner');
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div>
+                        <strong style="font-family: var(--font-display);"><i class="fas fa-info-circle"></i> Memasukkan Default:</strong>
+                        <span style="font-size: 0.9rem; margin-left: 6px;">Form terisi otomatis dari "<strong>${p.title}</strong>". Ubah sesuai keinginan lalu simpan!</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-yellow" onclick="cancelProjectEdit()" style="padding: 4px 12px; font-size: 0.78rem;">Batal</button>
+                `;
+            }
+
+            document.getElementById('addProjectForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.saveSingleDefaultProject = async (idx) => {
+            const p = DEFAULT_PROJECTS[idx];
+            if (!p) return;
+            try {
+                const payload = {
+                    title: p.title,
+                    category: p.category,
+                    categoryLabel: p.categoryLabel,
+                    description: p.description,
+                    image: p.image,
+                    link: p.link,
+                    tags: p.tags,
+                    createdAt: Date.now()
+                };
+                await set(ref(database, 'projects/' + p.id), payload);
+                showNotification(`Project "${p.title}" berhasil disimpan ke database! 🚀`, 'success');
+            } catch (err) {
+                showNotification('Gagal simpan: ' + err.message, 'error');
+            }
+        };
+
+        window.seedProjectsToFirebase = async (silent = false) => {
+            try {
+                for (const p of DEFAULT_PROJECTS) {
+                    const payload = {
+                        title: p.title,
+                        category: p.category,
+                        categoryLabel: p.categoryLabel,
+                        description: p.description,
+                        image: p.image,
+                        link: p.link,
+                        tags: p.tags,
+                        createdAt: Date.now()
+                    };
+                    await set(ref(database, 'projects/' + p.id), payload);
+                }
+                if (!silent) showNotification('Semua 6 project default website berhasil dimasukkan ke Firebase! 🎉', 'success');
+            } catch (err) {
+                if (!silent) showNotification('Gagal sync projects: ' + err.message, 'error');
+                throw err;
+            }
+        };
+
+        window.cancelProjectEdit = () => {
+            editingProjectId = null;
+            document.getElementById('addProjectForm').reset();
+            const heading = document.getElementById('projectFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-plus-circle" style="color: var(--primary-accent);"></i> Add New Project';
+            const submitBtn = document.getElementById('projectSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-save"></i> <span>Save & Publish Project</span>';
+            const cancelBtn = document.getElementById('cancelProjectEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'none';
+            const banner = document.getElementById('projectEditBanner');
+            if (banner) banner.style.display = 'none';
+        };
+
+        const cancelProjectEditBtn = document.getElementById('cancelProjectEditBtn');
+        if (cancelProjectEditBtn) {
+            cancelProjectEditBtn.addEventListener('click', cancelProjectEdit);
+        }
+
+        document.getElementById('addProjectForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const cat = document.getElementById('projectCategory').value;
+            const catLabels = {
+                'uiux': 'UI/UX Design',
+                'web': 'Web Development',
+                'branding': 'Branding & Identity'
+            };
+            const tagsRaw = document.getElementById('projectTags').value;
+            const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : ['Design'];
+
+            const payload = {
+                title: document.getElementById('projectTitle').value,
+                category: cat,
+                categoryLabel: catLabels[cat] || 'Design',
+                description: document.getElementById('projectDescription').value,
+                image: document.getElementById('projectImage').value,
+                link: document.getElementById('projectLink').value || '#',
+                tags: tags,
+                updatedAt: Date.now()
+            };
+
+            if (editingProjectId) {
+                update(ref(database, 'projects/' + editingProjectId), payload).then(() => {
+                    showNotification('Project updated successfully! 🚀', 'success');
+                    cancelProjectEdit();
+                }).catch(err => {
+                    showNotification('Error updating project: ' + err.message, 'error');
+                });
+            } else {
+                payload.createdAt = Date.now();
+                push(projectsRef, payload).then(() => {
+                    showNotification('Project published to portfolio! 🚀', 'success');
+                    document.getElementById('addProjectForm').reset();
+                }).catch(err => {
+                    showNotification('Error adding project: ' + err.message, 'error');
+                });
+            }
+        });
+
+        function renderDefaultProjectsList() {
+            const list = document.getElementById('projectsList');
+            if (!list) return;
+            list.innerHTML = `
+                <div style="padding: 16px 20px; background: rgba(255, 230, 0, 0.15); border: 2px dashed var(--border-color); border-radius: var(--radius-md); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <strong style="font-family: var(--font-display); font-size: 1.05rem; color: #000;"><i class="fas fa-sparkles" style="color: var(--primary-accent);"></i> 6 Projects Default Sedang Aktif di Website</strong>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Data di bawah ini adalah 6 project bawaan yang sedang tampil di website. Klik tombol kuning di kanan untuk memasukkan semuanya ke database Firebase agar tersimpan permanen & bebas diedit!</p>
+                    </div>
+                    <button type="button" class="btn btn-yellow btn-rect" onclick="seedProjectsToFirebase()" style="box-shadow: var(--shadow-xs);">
+                        <i class="fas fa-cloud-arrow-up"></i>
+                        <span>Masukkan Semua 6 Projects ke Firebase</span>
+                    </button>
+                </div>
+            `;
+
+            DEFAULT_PROJECTS.forEach((p, idx) => {
+                list.innerHTML += `
+                    <div class="project-item">
                         <div class="project-info">
-                            <img src="${project.image}" alt="${project.title}">
-                            <div>
-                                <h3>${project.title}</h3>
-                                <p>${project.description}</p>
-                                ${project.link ? `<a href="${project.link}" target="_blank">View Project</a>` : ''}
+                            <img src="${p.image}" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80'">
+                            <div class="item-text">
+                                <h3>${p.title}</h3>
+                                <p>${p.description}</p>
+                                <span class="item-pill-tag">${p.categoryLabel || p.category}</span>
+                                <span class="item-pill-tag" style="background: var(--secondary-accent); color: #000;"><i class="fas fa-globe"></i> Default Web Project</span>
                             </div>
                         </div>
                         <div class="project-actions">
-                            <button class="btn-edit" onclick="editProject('${id}', ${JSON.stringify(project).replace(/'/g, "&#39;")})">
-                                <i class="fas fa-edit"></i>
+                            <button type="button" class="btn-edit" onclick="editDefaultProject(${idx})" title="Edit & masukkan project ini ke database">
+                                <i class="fas fa-pencil-alt"></i>
+                                <span>Edit & Simpan</span>
                             </button>
-                            <button class="btn-delete" onclick="deleteProject('${id}')">
-                                <i class="fas fa-trash"></i>
+                            <button type="button" class="btn btn-sm btn-yellow" onclick="saveSingleDefaultProject(${idx})" title="Simpan project ini ke database">
+                                <i class="fas fa-save"></i>
+                                <span>Simpan ke DB</span>
                             </button>
                         </div>
-                    `;
-                    projectsList.appendChild(projectItem);
-                });
-            } else {
-                projectsList.innerHTML = '<p class="no-data">No projects yet. Add your first project above!</p>';
+                    </div>
+                `;
+            });
+        }
+
+        onValue(projectsRef, (snapshot) => {
+            const list = document.getElementById('projectsList');
+            const data = snapshot.val();
+            cachedProjects = data || {};
+            const hasData = data && Object.keys(data).length > 0;
+            const count = hasData ? Object.keys(data).length : DEFAULT_PROJECTS.length;
+
+            document.getElementById('dashProjectsCount').textContent = count;
+            document.getElementById('sidebarProjectsCount').textContent = count;
+
+            if (list) {
+                list.innerHTML = '';
+                if (hasData) {
+                    Object.entries(data).forEach(([id, p]) => {
+                        list.innerHTML += `
+                            <div class="project-item">
+                                <div class="project-info">
+                                    <img src="${p.image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'}" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80'">
+                                    <div class="item-text">
+                                        <h3>${p.title}</h3>
+                                        <p>${p.description}</p>
+                                        <span class="item-pill-tag">${p.categoryLabel || p.category || 'Design'}</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button type="button" class="btn-edit" onclick="editProject('${id}')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button type="button" class="btn-delete" onclick="deleteProject('${id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    renderDefaultProjectsList();
+                }
             }
         });
 
-        // Delete Project
         window.deleteProject = (id) => {
-            if (confirm('Are you sure you want to delete this project?')) {
-                remove(ref(database, 'projects/' + id))
-                    .then(() => {
-                        showNotification('Project deleted successfully!', 'success');
-                    })
-                    .catch((error) => {
-                        showNotification('Error: ' + error.message, 'error');
-                    });
+            if (confirm('Delete this project permanently?')) {
+                remove(ref(database, 'projects/' + id)).then(() => {
+                    showNotification('Project deleted! 🗑️', 'success');
+                    if (editingProjectId === id) cancelProjectEdit();
+                });
             }
         };
 
-        // Edit Project (Simple implementation)
-        window.editProject = (id, project) => {
-            document.getElementById('projectTitle').value = project.title;
-            document.getElementById('projectDescription').value = project.description;
-            document.getElementById('projectImage').value = project.image;
-            document.getElementById('projectLink').value = project.link || '';
+        // 8. ACHIEVEMENTS / CERTIFICATES - Add, Edit, Delete & Listen
+        let editingAchievementId = null;
+        let cachedAchievements = {};
 
-            // Change form to update mode
-            const form = document.getElementById('addProjectForm');
-            const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Project';
-            
-            form.onsubmit = (e) => {
-                e.preventDefault();
-                
-                const updatedData = {
-                    title: document.getElementById('projectTitle').value,
-                    description: document.getElementById('projectDescription').value,
-                    image: document.getElementById('projectImage').value || project.image,
-                    link: document.getElementById('projectLink').value,
-                    updatedAt: Date.now()
-                };
+        window.editAchievement = (id) => {
+            const a = cachedAchievements[id];
+            if (!a) return;
+            editingAchievementId = id;
 
-                update(ref(database, 'projects/' + id), updatedData)
-                    .then(() => {
-                        showNotification('Project updated successfully!', 'success');
-                        form.reset();
-                        submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Project';
-                        form.onsubmit = null;
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        showNotification('Error: ' + error.message, 'error');
-                    });
-            };
+            document.getElementById('achievementTitle').value = a.title || '';
+            document.getElementById('achievementOrg').value = a.organization || '';
+            document.getElementById('achievementDate').value = a.date || '';
+            document.getElementById('achievementDesc').value = a.description || '';
+            document.getElementById('achievementIcon').value = a.icon || 'fa-trophy';
+            document.getElementById('achievementImage').value = a.image || '';
 
-            // Scroll to form
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const heading = document.getElementById('achievementFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-pencil-alt" style="color: var(--secondary-accent);"></i> Edit Certificate: ' + a.title;
+
+            const submitBtn = document.getElementById('achievementSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> <span>Update & Save Certificate</span>';
+
+            const cancelBtn = document.getElementById('cancelAchievementEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const banner = document.getElementById('achievementEditBanner');
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div>
+                        <strong style="font-family: var(--font-display);"><i class="fas fa-pencil-alt"></i> Mode Edit:</strong>
+                        <span style="font-size: 0.9rem; margin-left: 6px;">Sedang mengedit sertifikat "<strong>${a.title}</strong>"</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-yellow" onclick="cancelAchievementEdit()" style="padding: 4px 12px; font-size: 0.78rem;">Batal</button>
+                `;
+            }
+
+            document.getElementById('addAchievementForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
         };
 
-        // Notification System
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                ${message}
-            `;
-            document.body.appendChild(notification);
+        window.editDefaultAchievement = (idx) => {
+            const a = DEFAULT_ACHIEVEMENTS[idx];
+            if (!a) return;
+            editingAchievementId = null;
 
+            document.getElementById('achievementTitle').value = a.title || '';
+            document.getElementById('achievementOrg').value = a.organization || '';
+            document.getElementById('achievementDate').value = a.date || '';
+            document.getElementById('achievementDesc').value = a.description || '';
+            document.getElementById('achievementIcon').value = a.icon || 'fa-trophy';
+            document.getElementById('achievementImage').value = a.image || '';
+
+            const heading = document.getElementById('achievementFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-magic" style="color: var(--primary-accent);"></i> Edit & Publish Default Certificate: ' + a.title;
+
+            const submitBtn = document.getElementById('achievementSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> <span>Simpan Certificate Ini ke Database</span>';
+
+            const cancelBtn = document.getElementById('cancelAchievementEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const banner = document.getElementById('achievementEditBanner');
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div>
+                        <strong style="font-family: var(--font-display);"><i class="fas fa-info-circle"></i> Memasukkan Default:</strong>
+                        <span style="font-size: 0.9rem; margin-left: 6px;">Form terisi otomatis dari "<strong>${a.title}</strong>". Ubah sesuai keinginan lalu simpan!</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-yellow" onclick="cancelAchievementEdit()" style="padding: 4px 12px; font-size: 0.78rem;">Batal</button>
+                `;
+            }
+
+            document.getElementById('addAchievementForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.saveSingleDefaultAchievement = async (idx) => {
+            const a = DEFAULT_ACHIEVEMENTS[idx];
+            if (!a) return;
+            try {
+                const payload = {
+                    title: a.title,
+                    organization: a.organization,
+                    date: a.date,
+                    description: a.description,
+                    icon: a.icon,
+                    image: a.image,
+                    createdAt: Date.now()
+                };
+                await set(ref(database, 'achievements/' + a.id), payload);
+                showNotification(`Certificate "${a.title}" berhasil disimpan ke database! 🏆`, 'success');
+            } catch (err) {
+                showNotification('Gagal simpan: ' + err.message, 'error');
+            }
+        };
+
+        window.seedAchievementsToFirebase = async (silent = false) => {
+            try {
+                for (const a of DEFAULT_ACHIEVEMENTS) {
+                    const payload = {
+                        title: a.title,
+                        organization: a.organization,
+                        date: a.date,
+                        description: a.description,
+                        icon: a.icon,
+                        image: a.image,
+                        createdAt: Date.now()
+                    };
+                    await set(ref(database, 'achievements/' + a.id), payload);
+                }
+                if (!silent) showNotification('Semua 4 certificate default website berhasil dimasukkan ke Firebase! 🏆', 'success');
+            } catch (err) {
+                if (!silent) showNotification('Gagal sync certificates: ' + err.message, 'error');
+                throw err;
+            }
+        };
+
+        window.cancelAchievementEdit = () => {
+            editingAchievementId = null;
+            document.getElementById('addAchievementForm').reset();
+            const heading = document.getElementById('achievementFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-award" style="color: var(--primary-accent);"></i> Add New Certificate / Achievement';
+            const submitBtn = document.getElementById('achievementSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-save"></i> <span>Add Certificate</span>';
+            const cancelBtn = document.getElementById('cancelAchievementEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'none';
+            const banner = document.getElementById('achievementEditBanner');
+            if (banner) banner.style.display = 'none';
+        };
+
+        const cancelAchievementEditBtn = document.getElementById('cancelAchievementEditBtn');
+        if (cancelAchievementEditBtn) {
+            cancelAchievementEditBtn.addEventListener('click', cancelAchievementEdit);
+        }
+
+        document.getElementById('addAchievementForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const payload = {
+                title: document.getElementById('achievementTitle').value,
+                organization: document.getElementById('achievementOrg').value,
+                date: document.getElementById('achievementDate').value,
+                description: document.getElementById('achievementDesc').value,
+                icon: document.getElementById('achievementIcon').value || 'fa-trophy',
+                image: document.getElementById('achievementImage').value || '',
+                updatedAt: Date.now()
+            };
+
+            if (editingAchievementId) {
+                update(ref(database, 'achievements/' + editingAchievementId), payload).then(() => {
+                    showNotification('Certificate updated successfully! 🏆', 'success');
+                    cancelAchievementEdit();
+                }).catch(err => {
+                    showNotification('Error updating: ' + err.message, 'error');
+                });
+            } else {
+                payload.createdAt = Date.now();
+                push(achievementsRef, payload).then(() => {
+                    showNotification('Certificate added to portfolio! 🏆', 'success');
+                    document.getElementById('addAchievementForm').reset();
+                }).catch(err => {
+                    showNotification('Error: ' + err.message, 'error');
+                });
+            }
+        });
+
+        function renderDefaultAchievementsList() {
+            const list = document.getElementById('achievementsList');
+            if (!list) return;
+            list.innerHTML = `
+                <div style="padding: 16px 20px; background: rgba(0, 229, 153, 0.15); border: 2px dashed var(--border-color); border-radius: var(--radius-md); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <strong style="font-family: var(--font-display); font-size: 1.05rem; color: #000;"><i class="fas fa-trophy" style="color: var(--secondary-accent);"></i> 4 Certificates Default Sedang Aktif di Website</strong>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Data di bawah ini adalah sertifikat & milestone bawaan yang saat ini tampil di website. Klik tombol kuning di kanan untuk memasukkan semuanya ke database Firebase agar tersimpan permanen!</p>
+                    </div>
+                    <button type="button" class="btn btn-yellow btn-rect" onclick="seedAchievementsToFirebase()" style="box-shadow: var(--shadow-xs);">
+                        <i class="fas fa-cloud-arrow-up"></i>
+                        <span>Masukkan Semua 4 Certificates ke Firebase</span>
+                    </button>
+                </div>
+            `;
+
+            DEFAULT_ACHIEVEMENTS.forEach((a, idx) => {
+                list.innerHTML += `
+                    <div class="project-item">
+                        <div class="project-info">
+                            ${a.image ? `
+                                <img src="${a.image}" alt="${a.title}" onerror="this.style.display='none'">
+                            ` : `
+                                <div style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--secondary-accent); border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs); flex-shrink: 0;">
+                                    <i class="fas ${a.icon || 'fa-trophy'}" style="font-size: 1.8rem; color: #000000;"></i>
+                                </div>
+                            `}
+                            <div class="item-text">
+                                <h3>${a.title}</h3>
+                                <p><strong>${a.organization}</strong> • ${a.date}</p>
+                                <p style="margin-top: 4px;">${a.description}</p>
+                                <span class="item-pill-tag" style="background: var(--green-accent); color: #000;"><i class="fas fa-globe"></i> Default Web Certificate</span>
+                            </div>
+                        </div>
+                        <div class="project-actions">
+                            <button type="button" class="btn-edit" onclick="editDefaultAchievement(${idx})" title="Edit & masukkan sertifikat ini ke database">
+                                <i class="fas fa-pencil-alt"></i>
+                                <span>Edit & Simpan</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-yellow" onclick="saveSingleDefaultAchievement(${idx})" title="Simpan sertifikat ini ke database">
+                                <i class="fas fa-save"></i>
+                                <span>Simpan ke DB</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        onValue(achievementsRef, (snapshot) => {
+            const list = document.getElementById('achievementsList');
+            const data = snapshot.val();
+            cachedAchievements = data || {};
+            const hasData = data && Object.keys(data).length > 0;
+            const count = hasData ? Object.keys(data).length : DEFAULT_ACHIEVEMENTS.length;
+
+            document.getElementById('dashAchievementsCount').textContent = count;
+            document.getElementById('sidebarAchievementsCount').textContent = count;
+
+            if (list) {
+                list.innerHTML = '';
+                if (hasData) {
+                    Object.entries(data).forEach(([id, a]) => {
+                        list.innerHTML += `
+                            <div class="project-item">
+                                <div class="project-info">
+                                    ${a.image ? `
+                                        <img src="${a.image}" alt="${a.title}" onerror="this.style.display='none'">
+                                    ` : `
+                                        <div style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--secondary-accent); border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs); flex-shrink: 0;">
+                                            <i class="fas ${a.icon || 'fa-trophy'}" style="font-size: 1.8rem; color: #000000;"></i>
+                                        </div>
+                                    `}
+                                    <div class="item-text">
+                                        <h3>${a.title}</h3>
+                                        <p><strong>${a.organization}</strong> • ${a.date}</p>
+                                        <p style="margin-top: 4px;">${a.description}</p>
+                                        ${a.image ? `<span class="item-pill-tag" style="background: var(--green-accent);"><i class="fas fa-image"></i> Certificate Photo Attached</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button type="button" class="btn-edit" onclick="editAchievement('${id}')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button type="button" class="btn-delete" onclick="deleteAchievement('${id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    renderDefaultAchievementsList();
+                }
+            }
+        });
+
+        window.deleteAchievement = (id) => {
+            if (confirm('Delete this certificate record?')) {
+                remove(ref(database, 'achievements/' + id)).then(() => {
+                    showNotification('Certificate deleted! 🗑️', 'success');
+                    if (editingAchievementId === id) cancelAchievementEdit();
+                });
+            }
+        };
+
+        // 9. TECH STACK / SKILLS - 9 Default Built-in Skills & Live Management
+        // (DEFAULT_SKILLS is defined above in Section 7)
+
+        // Live Preview Synchronizer
+        const skillNameInput = document.getElementById('skillName');
+        const skillSubtitleInput = document.getElementById('skillSubtitle');
+        const skillCategorySelect = document.getElementById('skillCategory');
+        const skillThemeSelect = document.getElementById('skillTheme');
+        const skillPresetSelect = document.getElementById('skillPresetIcon');
+        const skillImageInput = document.getElementById('skillImage');
+        const customIconGroup = document.getElementById('customIconGroup');
+        const skillCustomIconInput = document.getElementById('skillCustomIcon');
+
+        const previewTitleEl = document.getElementById('previewTitleEl');
+        const previewSubtitleEl = document.getElementById('previewSubtitleEl');
+        const previewIconEl = document.getElementById('previewIconEl');
+        const previewImgEl = document.getElementById('previewImgEl');
+        const previewIconWrap = document.getElementById('previewIconWrap');
+
+        const themeColors = {
+            yellow: '#FFE500',
+            blue: '#1E50FF',
+            pink: '#FF66C4',
+            green: '#00E599',
+            purple: '#A855F7',
+            orange: '#FF7A00',
+            cyan: '#00D2FF'
+        };
+
+        function updateSkillLivePreview() {
+            if (previewTitleEl) previewTitleEl.textContent = skillNameInput.value.trim() || 'Skill Name';
+            if (previewSubtitleEl) previewSubtitleEl.textContent = skillSubtitleInput.value.trim() || skillCategorySelect.options[skillCategorySelect.selectedIndex].text;
+            
+            const selectedTheme = skillThemeSelect.value || 'yellow';
+            if (previewIconWrap) {
+                previewIconWrap.style.background = themeColors[selectedTheme] || '#FFE500';
+                previewIconWrap.style.color = (selectedTheme === 'blue' || selectedTheme === 'purple') ? '#FFF' : '#000';
+            }
+
+            const imageUrl = skillImageInput.value.trim();
+            if (imageUrl) {
+                if (previewImgEl) {
+                    previewImgEl.src = imageUrl;
+                    previewImgEl.style.display = 'block';
+                }
+                if (previewIconEl) previewIconEl.style.display = 'none';
+            } else {
+                if (previewImgEl) previewImgEl.style.display = 'none';
+                if (previewIconEl) {
+                    previewIconEl.style.display = 'inline-block';
+                    const preset = skillPresetSelect.value;
+                    const finalIcon = preset === 'custom' ? (skillCustomIconInput.value.trim() || 'fas fa-star') : preset;
+                    previewIconEl.className = finalIcon;
+                }
+            }
+        }
+
+        if (skillPresetSelect) {
+            skillPresetSelect.addEventListener('change', () => {
+                if (skillPresetSelect.value === 'custom') {
+                    customIconGroup.style.display = 'block';
+                } else {
+                    customIconGroup.style.display = 'none';
+                }
+                updateSkillLivePreview();
+            });
+        }
+
+        [skillNameInput, skillSubtitleInput, skillCategorySelect, skillThemeSelect, skillImageInput, skillCustomIconInput].forEach(el => {
+            if (el) {
+                el.addEventListener('input', updateSkillLivePreview);
+                el.addEventListener('change', updateSkillLivePreview);
+            }
+        });
+        updateSkillLivePreview();
+
+        function renderDefaultSkillsList() {
+            const list = document.getElementById('skillsList');
+            if (!list) return;
+            list.innerHTML = `
+                <div style="padding: 14px 18px; background: rgba(30, 80, 255, 0.1); border: 2px dashed var(--primary-accent); border-radius: var(--radius-md); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong style="color: var(--primary-accent); font-size: 0.98rem;"><i class="fas fa-info-circle"></i> 9 Built-in Default Skills Aktif di Website</strong>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Skills di bawah ini adalah bawaan yang saat ini aktif tampil di website portofolio. Klik tombol kuning <strong>"Sync / Import 9 Default Web Skills to Firebase"</strong> di atas atau <strong>"Save to DB"</strong> agar tersimpan ke database & bisa diedit/dihapus!</p>
+                    </div>
+                </div>
+            `;
+
+            DEFAULT_SKILLS.forEach((s, idx) => {
+                const bgCol = themeColors[s.theme || 'yellow'] || '#FFE500';
+                list.innerHTML += `
+                    <div class="project-item">
+                        <div class="project-info">
+                            <div style="width: 58px; height: 58px; display: flex; align-items: center; justify-content: center; background: ${bgCol}; border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs); flex-shrink: 0; color: #000;">
+                                <i class="${s.icon}" style="font-size: 1.6rem;"></i>
+                            </div>
+                            <div class="item-text">
+                                <h3>${s.name}</h3>
+                                <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">${s.subtitle}</p>
+                                <span class="item-pill-tag">${s.categoryLabel}</span>
+                                <span class="item-pill-tag" style="background: var(--pink-accent); color: #000;">Default Web Skill</span>
+                            </div>
+                        </div>
+                        <div class="project-actions">
+                            <button type="button" class="btn-edit" onclick="editDefaultSkill(${idx})">
+                                <i class="fas fa-pencil-alt"></i>
+                                <span>Customize</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-yellow" onclick="saveSingleDefaultSkill(${idx})">
+                                <i class="fas fa-cloud-arrow-up"></i>
+                                <span>Save to DB</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        renderDefaultSkillsList();
+
+        // 9. TECH STACK / SKILLS - Add, Edit, Delete & Listen
+        let editingSkillId = null;
+        let cachedSkills = {};
+
+        window.editSkill = (id) => {
+            const s = cachedSkills[id];
+            if (!s) return;
+            editingSkillId = id;
+
+            skillNameInput.value = s.name || '';
+            skillSubtitleInput.value = s.subtitle || s.categoryLabel || '';
+            skillCategorySelect.value = s.category || 'design';
+            skillThemeSelect.value = s.theme || 'yellow';
+            skillImageInput.value = s.image || '';
+
+            // Match preset or custom icon
+            const matchingOption = Array.from(skillPresetSelect.options).find(opt => opt.value === s.icon);
+            if (matchingOption) {
+                skillPresetSelect.value = s.icon;
+                customIconGroup.style.display = 'none';
+                skillCustomIconInput.value = '';
+            } else if (s.icon) {
+                skillPresetSelect.value = 'custom';
+                customIconGroup.style.display = 'block';
+                skillCustomIconInput.value = s.icon;
+            }
+
+            updateSkillLivePreview();
+
+            const heading = document.getElementById('skillFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-pencil-alt" style="color: var(--secondary-accent);"></i> Edit Skill Badge: ' + s.name;
+
+            const submitBtn = document.getElementById('skillSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> <span>Update & Save Skill Badge</span>';
+
+            const cancelBtn = document.getElementById('cancelSkillEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const banner = document.getElementById('skillEditBanner');
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div>
+                        <strong style="font-family: var(--font-display);"><i class="fas fa-pencil-alt"></i> Mode Edit:</strong>
+                        <span style="font-size: 0.9rem; margin-left: 6px;">Sedang mengedit skill "<strong>${s.name}</strong>"</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-yellow" onclick="cancelSkillEdit()" style="padding: 4px 12px; font-size: 0.78rem;">Batal</button>
+                `;
+            }
+
+            document.getElementById('addSkillForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.editDefaultSkill = (idx) => {
+            const s = DEFAULT_SKILLS[idx];
+            if (!s) return;
+            editingSkillId = null;
+
+            skillNameInput.value = s.name || '';
+            skillSubtitleInput.value = s.subtitle || '';
+            skillCategorySelect.value = s.category || 'design';
+            skillThemeSelect.value = s.theme || 'yellow';
+            skillImageInput.value = s.image || '';
+
+            const matchingOption = Array.from(skillPresetSelect.options).find(opt => opt.value === s.icon);
+            if (matchingOption) {
+                skillPresetSelect.value = s.icon;
+                customIconGroup.style.display = 'none';
+                skillCustomIconInput.value = '';
+            } else if (s.icon) {
+                skillPresetSelect.value = 'custom';
+                customIconGroup.style.display = 'block';
+                skillCustomIconInput.value = s.icon;
+            }
+
+            updateSkillLivePreview();
+
+            const heading = document.getElementById('skillFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-pencil-alt" style="color: var(--secondary-accent);"></i> Customize Default Skill: ' + s.name;
+
+            const submitBtn = document.getElementById('skillSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> <span>Save Customized Skill to DB</span>';
+
+            const cancelBtn = document.getElementById('cancelSkillEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const banner = document.getElementById('skillEditBanner');
+            if (banner) {
+                banner.style.display = 'flex';
+                banner.innerHTML = `
+                    <div>
+                        <strong style="font-family: var(--font-display);"><i class="fas fa-magic"></i> Customizing Default Skill:</strong>
+                        <span style="font-size: 0.9rem; margin-left: 6px;">Ubah logo / teks "<strong>${s.name}</strong>" lalu simpan ke database</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-yellow" onclick="cancelSkillEdit()" style="padding: 4px 12px; font-size: 0.78rem;">Batal</button>
+                `;
+            }
+
+            document.getElementById('addSkillForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.cancelSkillEdit = () => {
+            editingSkillId = null;
+            document.getElementById('addSkillForm').reset();
+            customIconGroup.style.display = 'none';
+            updateSkillLivePreview();
+
+            const heading = document.getElementById('skillFormHeading');
+            if (heading) heading.innerHTML = '<i class="fas fa-layer-group" style="color: var(--primary-accent);"></i> Add New Tech Stack / Skill Badge';
+
+            const submitBtn = document.getElementById('skillSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-save"></i> <span>Add Skill to Tech Stack</span>';
+
+            const cancelBtn = document.getElementById('cancelSkillEditBtn');
+            if (cancelBtn) cancelBtn.style.display = 'none';
+
+            const banner = document.getElementById('skillEditBanner');
+            if (banner) banner.style.display = 'none';
+        };
+
+        const cancelSkillEditBtn = document.getElementById('cancelSkillEditBtn');
+        if (cancelSkillEditBtn) {
+            cancelSkillEditBtn.addEventListener('click', cancelSkillEdit);
+        }
+
+        // Add / Update Skill in Firebase
+        document.getElementById('addSkillForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const cat = skillCategorySelect.value;
+            const catLabels = {
+                'design': 'UI/UX Design',
+                'frontend': 'Frontend Dev',
+                'tools': 'Creative Tools',
+                'other': 'Other'
+            };
+
+            const preset = skillPresetSelect.value;
+            const finalIcon = preset === 'custom' ? (skillCustomIconInput.value.trim() || 'fas fa-star') : preset;
+            const imageUrl = skillImageInput.value.trim();
+            const subtitle = skillSubtitleInput.value.trim() || catLabels[cat] || 'Skill';
+
+            const payload = {
+                name: skillNameInput.value.trim(),
+                subtitle: subtitle,
+                category: cat,
+                categoryLabel: catLabels[cat] || 'Skill',
+                icon: finalIcon,
+                image: imageUrl,
+                theme: skillThemeSelect.value || 'yellow',
+                updatedAt: Date.now()
+            };
+
+            if (editingSkillId) {
+                update(ref(database, 'skills/' + editingSkillId), payload).then(() => {
+                    showNotification('Skill badge updated successfully! ⚡', 'success');
+                    cancelSkillEdit();
+                }).catch(err => {
+                    showNotification('Error updating skill: ' + err.message, 'error');
+                });
+            } else {
+                payload.createdAt = Date.now();
+                push(skillsRef, payload).then(() => {
+                    showNotification('Skill badge added to tech stack! ⚡', 'success');
+                    cancelSkillEdit();
+                }).catch(err => {
+                    showNotification('Error adding skill: ' + err.message, 'error');
+                });
+            }
+        });
+
+        // 1-Click Import of 9 Default Web Skills to Firebase
+        const importDefaultsBtn = document.getElementById('importDefaultsBtn');
+        if (importDefaultsBtn) {
+            importDefaultsBtn.addEventListener('click', async () => {
+                if (confirm('Import all 9 default web skills to your Firebase database? This allows you to manage and edit them freely.')) {
+                    try {
+                        importDefaultsBtn.disabled = true;
+                        importDefaultsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Importing...</span>';
+                        for (const s of DEFAULT_SKILLS) {
+                            await push(skillsRef, {
+                                ...s,
+                                createdAt: Date.now()
+                            });
+                        }
+                        showNotification('All 9 default skills imported to database! 🎉', 'success');
+                    } catch (err) {
+                        showNotification('Import failed: ' + err.message, 'error');
+                    } finally {
+                        importDefaultsBtn.disabled = false;
+                        importDefaultsBtn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> <span>Sync / Import 9 Default Web Skills to Firebase</span>';
+                    }
+                }
+            });
+        }
+
+        // Realtime Skills List Listener
+        onValue(skillsRef, (snapshot) => {
+            const list = document.getElementById('skillsList');
+            const data = snapshot.val();
+            cachedSkills = data || {};
+            const hasData = data && Object.keys(data).length > 0;
+            const count = hasData ? Object.keys(data).length : DEFAULT_SKILLS.length;
+
+            document.getElementById('dashSkillsCount').textContent = count;
+            document.getElementById('sidebarSkillsCount').textContent = count;
+
+            if (list) {
+                list.innerHTML = '';
+                if (hasData) {
+                    Object.entries(data).forEach(([id, s]) => {
+                        const bgCol = themeColors[s.theme || 'yellow'] || '#FFE500';
+                        list.innerHTML += `
+                            <div class="project-item">
+                                <div class="project-info">
+                                    <div style="width: 58px; height: 58px; display: flex; align-items: center; justify-content: center; background: ${bgCol}; border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs); flex-shrink: 0; color: #000;">
+                                        ${s.image ? `
+                                            <img src="${s.image}" alt="${s.name}" style="width: 36px; height: 36px; object-fit: contain;" onerror="this.style.display='none'">
+                                        ` : `
+                                            <i class="${s.icon || 'fas fa-star'}" style="font-size: 1.6rem;"></i>
+                                        `}
+                                    </div>
+                                    <div class="item-text">
+                                        <h3>${s.name}</h3>
+                                        <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">${s.subtitle || s.categoryLabel || s.category}</p>
+                                        <span class="item-pill-tag">${s.categoryLabel || s.category}</span>
+                                        ${s.image ? `<span class="item-pill-tag" style="background: var(--green-accent);"><i class="fas fa-image"></i> Logo Image</span>` : `<span class="item-pill-tag" style="background: var(--cyan-accent);"><i class="fas fa-icons"></i> FontAwesome</span>`}
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <button type="button" class="btn-edit" onclick="editSkill('${id}')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button type="button" class="btn-delete" onclick="deleteSkill('${id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    renderDefaultSkillsList();
+                }
+            }
+        });
+
+        window.saveSingleDefaultSkill = (idx) => {
+            const skill = DEFAULT_SKILLS[idx];
+            if (skill) {
+                push(skillsRef, {
+                    ...skill,
+                    createdAt: Date.now()
+                }).then(() => {
+                    showNotification(`Skill "${skill.name}" saved to database! ⚡`, 'success');
+                });
+            }
+        };
+
+        window.deleteSkill = (id) => {
+            if (confirm('Delete this skill badge from your tech stack?')) {
+                remove(ref(database, 'skills/' + id)).then(() => {
+                    showNotification('Skill removed! 🗑️', 'success');
+                    if (editingSkillId === id) cancelSkillEdit();
+                });
+            }
+        };
+
+        // 10. MESSAGES / INBOX - Listen & Delete
+        onValue(messagesRef, (snapshot) => {
+            const messagesList = document.getElementById('messagesList');
+            const dashRecentList = document.getElementById('dashRecentMessagesList');
+            const data = snapshot.val();
+            const count = data ? Object.keys(data).length : 0;
+
+            document.getElementById('dashMessagesCount').textContent = count;
+            document.getElementById('sidebarMessagesCount').textContent = count;
+
+            if (messagesList) {
+                messagesList.innerHTML = '';
+                if (count > 0) {
+                    Object.entries(data).reverse().forEach(([id, m]) => {
+                        const dateFormatted = m.timestamp ? new Date(m.timestamp).toLocaleString() : 'Recent';
+                        const initial = m.name ? m.name.charAt(0).toUpperCase() : 'U';
+
+                        messagesList.innerHTML += `
+                            <div class="message-card">
+                                <div class="message-header-row">
+                                    <div class="message-sender-box">
+                                        <div class="sender-avatar-initial">${initial}</div>
+                                        <div class="sender-details">
+                                            <h4>${m.name}</h4>
+                                            <span><i class="fas fa-envelope"></i> ${m.email}</span>
+                                        </div>
+                                    </div>
+                                    <span class="message-time-badge">${dateFormatted}</span>
+                                </div>
+
+                                <div class="message-body-quote">
+                                    "${m.message}"
+                                </div>
+
+                                <div class="message-action-row">
+                                    <a href="mailto:${m.email}?subject=Reply%20to%20your%20Portfolio%20Inquiry" class="btn btn-sm btn-yellow">
+                                        <i class="fas fa-reply"></i>
+                                        <span>Reply Email</span>
+                                    </a>
+                                    <button type="button" class="btn-delete" onclick="deleteMessage('${id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    messagesList.innerHTML = '<p class="no-data">💌 No inquiries yet in inbox. Contact submissions from the portfolio will arrive here!</p>';
+                }
+            }
+
+            // Dashboard recent feed preview
+            if (dashRecentList) {
+                dashRecentList.innerHTML = '';
+                if (count > 0) {
+                    const entries = Object.entries(data).reverse().slice(0, 3);
+                    entries.forEach(([id, m]) => {
+                        dashRecentList.innerHTML += `
+                            <div style="padding: 14px; background: var(--bg-card-alt); border: var(--border-width-sm) solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <strong style="font-family: var(--font-display);">${m.name}</strong>
+                                    <p style="font-size: 0.85rem; color: var(--text-muted);">${m.email}</p>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-yellow" onclick="switchTab('messages')">
+                                    <span>View</span>
+                                </button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    dashRecentList.innerHTML = '<p class="no-data" style="padding: 16px;">No recent inquiries yet.</p>';
+                }
+            }
+        });
+
+        window.deleteMessage = (id) => {
+            if (confirm('Delete this message permanently?')) {
+                remove(ref(database, 'messages/' + id)).then(() => {
+                    showNotification('Message deleted! 🗑️', 'success');
+                });
+            }
+        };
+
+        // 11. PROFILE SETTINGS - Update & Load
+        document.getElementById('updateProfileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const profileData = {
+                name: document.getElementById('profileName').value,
+                role: document.getElementById('profileRole').value,
+                tagline: document.getElementById('profileTagline').value,
+                photo: document.getElementById('profilePhoto').value,
+                bio: document.getElementById('profileBio').value,
+                email: document.getElementById('profileEmail').value,
+                whatsapp: document.getElementById('profileWhatsapp').value,
+                logoText: document.getElementById('profileLogoText').value.trim() || 'R',
+                badgeTag: document.getElementById('profileBadgeTag').value.trim() || 'Available for Exciting Projects',
+                stickers: document.getElementById('profileStickers').value.trim(),
+                stats: {
+                    projects: document.getElementById('statProjects').value,
+                    achievements: document.getElementById('statAchievements').value
+                },
+                updatedAt: Date.now()
+            };
+
+            update(profileRef, profileData).then(() => {
+                showNotification('Profile updated & synced to portfolio website! ✨', 'success');
+            }).catch(err => {
+                showNotification('Error updating profile: ' + err.message, 'error');
+            });
+        });
+
+        onValue(profileRef, (snapshot) => {
+            const currentProfile = document.getElementById('currentProfile');
+            const data = snapshot.val();
+
+            if (data) {
+                const active = document.activeElement;
+
+                // Populate inputs without wiping whatever the user is currently typing
+                if (data.name && active !== document.getElementById('profileName')) 
+                    document.getElementById('profileName').value = data.name;
+                if (data.role && active !== document.getElementById('profileRole')) 
+                    document.getElementById('profileRole').value = data.role;
+                if (data.tagline && active !== document.getElementById('profileTagline')) 
+                    document.getElementById('profileTagline').value = data.tagline;
+                if (data.photo && active !== document.getElementById('profilePhoto')) 
+                    document.getElementById('profilePhoto').value = data.photo;
+                if (data.bio && active !== document.getElementById('profileBio')) 
+                    document.getElementById('profileBio').value = data.bio;
+                if (data.email && active !== document.getElementById('profileEmail')) 
+                    document.getElementById('profileEmail').value = data.email;
+                if (data.whatsapp && active !== document.getElementById('profileWhatsapp')) 
+                    document.getElementById('profileWhatsapp').value = data.whatsapp;
+                if (data.logoText !== undefined && active !== document.getElementById('profileLogoText')) 
+                    document.getElementById('profileLogoText').value = data.logoText;
+                if (data.badgeTag !== undefined && active !== document.getElementById('profileBadgeTag')) 
+                    document.getElementById('profileBadgeTag').value = data.badgeTag;
+                if (data.stickers !== undefined && active !== document.getElementById('profileStickers')) 
+                    document.getElementById('profileStickers').value = data.stickers;
+                if (data.stats) {
+                    if (data.stats.projects && active !== document.getElementById('statProjects')) 
+                        document.getElementById('statProjects').value = data.stats.projects;
+                    if (data.stats.achievements && active !== document.getElementById('statAchievements')) 
+                        document.getElementById('statAchievements').value = data.stats.achievements;
+                }
+
+                if (currentProfile) {
+                    currentProfile.innerHTML = `
+                        <div style="display: flex; gap: 20px; align-items: start; flex-wrap: wrap;">
+                            <img src="${data.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'}" alt="Avatar" style="width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-lg); border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-sm);">
+                            <div style="flex: 1; min-width: 240px;">
+                                <h4 style="font-family: var(--font-display); font-size: 1.3rem;">${data.name || 'Risky Dimas Nugroho'}</h4>
+                                <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--primary-accent); margin-bottom: 8px;"><strong>${data.role || 'Creative Designer'}</strong></p>
+                                <p style="font-size: 0.92rem; line-height: 1.6;">${(data.bio || 'No bio set').replace(/\n/g, '<br>')}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                if (currentProfile) {
+                    currentProfile.innerHTML = '<p class="no-data">No profile data in database yet. Save the form above to initialize!</p>';
+                }
+            }
+        });
+
+        // 12. Toast Notification Helper
+        function showNotification(message, type = 'success') {
+            const n = document.createElement('div');
+            n.className = `notification ${type}`;
+            n.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> <span>${message}</span>`;
+            document.body.appendChild(n);
             setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease forwards';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
+                n.style.animation = 'slideOutToast 0.3s forwards';
+                setTimeout(() => n.remove(), 300);
+            }, 3200);
         }
     </script>
 </body>
