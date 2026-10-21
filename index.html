@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -528,19 +528,18 @@
 
             <div class="modal-body-resume">
                 <div class="resume-header-card">
-                    <h2 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 4px;">Risky Dimas
-                        Nugroho</h2>
-                    <p
+                    <h2 id="resumeName" style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 4px;">Risky Dimas Nugroho</h2>
+                    <p id="resumeRole"
                         style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--primary-accent); font-weight: bold; margin-bottom: 12px;">
                         Creative UI/UX Designer & Frontend Explorer</p>
-                    <p style="font-size: 0.95rem; color: var(--text-muted);"><i class="fas fa-envelope"></i>
-                        riskydimasnu@gmail.com &nbsp;|&nbsp; <i class="fas fa-phone"></i> +62 813-2895-9495
-                        &nbsp;|&nbsp; Indonesia</p>
+                    <p id="resumeContact" style="font-size: 0.95rem; color: var(--text-muted);"><i class="fas fa-envelope"></i>
+                        <span id="resumeEmail">riskydimasnu@gmail.com</span> &nbsp;|&nbsp; <i class="fas fa-phone"></i> <span id="resumePhone">+62 813-2895-9495</span>
+                        &nbsp;|&nbsp; <span id="resumeLocation">Indonesia</span></p>
                 </div>
 
                 <div class="resume-section-block">
                     <h3 class="resume-section-title">Professional Summary</h3>
-                    <p style="font-size: 0.98rem; line-height: 1.7;">
+                    <p id="resumeSummary" style="font-size: 0.98rem; line-height: 1.7;">
                         Dynamic UI/UX designer and creative frontend builder specializing in user-centric interfaces,
                         design systems, and engaging micro-interactions. Proven track record in rapid prototyping,
                         competitive esports team leadership, and content creation.
@@ -549,7 +548,7 @@
 
                 <div class="resume-section-block">
                     <h3 class="resume-section-title">Core Skills</h3>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                    <div id="resumeSkillsList" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
                         <span class="tech-tag">UI/UX Design</span>
                         <span class="tech-tag">Figma & Prototyping</span>
                         <span class="tech-tag">Wireframing</span>
@@ -563,17 +562,19 @@
 
                 <div class="resume-section-block">
                     <h3 class="resume-section-title">Key Projects & Achievements</h3>
-                    <div class="resume-item-row">
-                        <strong>Neon Pulse - Mobile Streaming Interface</strong>
-                        <span>Figma Design System • 2024</span>
-                    </div>
-                    <div class="resume-item-row">
-                        <strong>1st Place Winner - Regional Esports Championship</strong>
-                        <span>National Youth Gaming League • 2024</span>
-                    </div>
-                    <div class="resume-item-row">
-                        <strong>PixelCraft Studio Portfolio Web</strong>
-                        <span>Interactive Frontend Architecture • 2023</span>
+                    <div id="resumeKeyItems">
+                        <div class="resume-item-row">
+                            <strong>Neon Pulse - Mobile Streaming Interface</strong>
+                            <span>Figma Design System • 2024</span>
+                        </div>
+                        <div class="resume-item-row">
+                            <strong>1st Place Winner - Regional Esports Championship</strong>
+                            <span>National Youth Gaming League • 2024</span>
+                        </div>
+                        <div class="resume-item-row">
+                            <strong>PixelCraft Studio Portfolio Web</strong>
+                            <span>Interactive Frontend Architecture • 2023</span>
+                        </div>
                     </div>
                 </div>
 
@@ -582,7 +583,11 @@
                         <i class="fas fa-print"></i>
                         <span>Print / Save PDF</span>
                     </button>
-                    <a href="mailto:riskydimasnu@gmail.com?subject=Job%20Inquiry%20-%20Risky%20Dimas"
+                    <a id="resumeDirectPdfBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-yellow" style="display: none;">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Download PDF File</span>
+                    </a>
+                    <a id="resumeHireMeBtn" href="mailto:riskydimasnu@gmail.com?subject=Job%20Inquiry%20-%20Risky%20Dimas"
                         class="btn btn-sm btn-rect">
                         <i class="fas fa-paper-plane"></i>
                         <span>Hire Me</span>
@@ -593,7 +598,7 @@
     </div>
 
     <!-- JavaScript Interactive Engine -->
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>

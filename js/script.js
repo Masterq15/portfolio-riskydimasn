@@ -15,8 +15,15 @@ const DEFAULT_PROFILE = {
   photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
   location: "Indonesia",
   email: "riskydimasnu@gmail.com",
-  phone: "+62 813-2895-9495"
+  phone: "+62 813-2895-9495",
+  resumeSummary: "Dynamic UI/UX designer and creative frontend builder specializing in user-centric interfaces, design systems, and engaging micro-interactions. Proven track record in rapid prototyping, competitive esports team leadership, and content creation.",
+  resumeSkills: "UI/UX Design, Figma & Prototyping, Wireframing, Design Systems, HTML5 / Vanilla CSS, JavaScript (ES6+), Adobe Photoshop, CapCut Video Production",
+  resumePdfUrl: "",
+  resumeKeyItems: "Neon Pulse - Mobile Streaming Interface | Figma Design System • 2024\n1st Place Winner - Regional Esports Championship | National Youth Gaming League • 2024\nPixelCraft Studio Portfolio Web | Interactive Frontend Architecture • 2023"
 };
+
+let currentProfile = { ...DEFAULT_PROFILE };
+let allSkills = [];
 
 const DEFAULT_PROJECTS = [
   {
@@ -89,6 +96,12 @@ const DEFAULT_ACHIEVEMENTS = [
     date: "2024",
     icon: "fa-trophy",
     image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80"
+    ],
+    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    proofUrl: "https://www.instagram.com/ig.masterq",
     description: "Led team tactics, communication strategy, and game-sense execution to triumph over 64 competing teams in the grand final."
   },
   {
@@ -98,6 +111,12 @@ const DEFAULT_ACHIEVEMENTS = [
     date: "2023",
     icon: "fa-award",
     image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80"
+    ],
+    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    proofUrl: "https://www.figma.com",
     description: "Recognized for high-impact visual design innovation and accessible component architecture in student portfolio competition."
   },
   {
@@ -107,6 +126,11 @@ const DEFAULT_ACHIEVEMENTS = [
     date: "2023",
     icon: "fa-certificate",
     image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
+    ],
+    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    proofUrl: "https://credly.com",
     description: "Completed intensive design sprint covering wireframing, heuristic evaluation, usability testing, and interactive prototyping."
   },
   {
@@ -116,6 +140,11 @@ const DEFAULT_ACHIEVEMENTS = [
     date: "2022",
     icon: "fa-fire",
     image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80"
+    ],
+    pdfUrl: "",
+    proofUrl: "https://www.tiktok.com/@masterqqq",
     description: "Produced aesthetic design breakdown reels and editing tutorials reaching over 100,000 organic impressions across TikTok and Instagram."
   }
 ];
@@ -312,7 +341,7 @@ function initProjectFilters() {
 }
 
 // ==========================================
-// 6. Dynamic Rendering (Achievements)
+// 6. Dynamic Rendering (Achievements with Photo Slider & Credential Actions)
 // ==========================================
 let allAchievements = [...DEFAULT_ACHIEVEMENTS];
 
@@ -320,24 +349,85 @@ function renderAchievements() {
   const grid = document.getElementById('achievementsGrid');
   if (!grid) return;
 
-  grid.innerHTML = allAchievements.map(a => `
-    <div class="achievement-card">
-      ${a.image ? `
+  grid.innerHTML = allAchievements.map((a, cardIdx) => {
+    const photos = (a.images && Array.isArray(a.images) && a.images.length > 0)
+      ? a.images
+      : (a.image ? [a.image] : []);
+
+    let mediaMarkup = '';
+    if (photos.length > 1) {
+      // Slidable Photo Carousel with controls, counter and dots
+      mediaMarkup = `
+        <div class="achievement-photo-wrap achievement-slider-wrap" id="ach-slider-${cardIdx}" data-current="0" data-total="${photos.length}">
+          <div class="achievement-slide-track">
+            ${photos.map((img, idx) => `
+              <img src="${img}" alt="${a.title} photo ${idx + 1}" class="achievement-slide-img ${idx === 0 ? 'active' : ''}" loading="lazy" onerror="this.style.display='none'">
+            `).join('')}
+          </div>
+          
+          <div class="achievement-slide-counter">
+            <i class="fas fa-images"></i> <span class="current-slide-num">1</span>/${photos.length}
+          </div>
+
+          <button type="button" class="achievement-slider-btn prev-btn" onclick="slideAchievementPhoto(${cardIdx}, -1)" aria-label="Previous photo">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button type="button" class="achievement-slider-btn next-btn" onclick="slideAchievementPhoto(${cardIdx}, 1)" aria-label="Next photo">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+
+          <div class="achievement-slider-dots">
+            ${photos.map((_, idx) => `
+              <span class="slider-dot ${idx === 0 ? 'active' : ''}" onclick="goToAchievementPhoto(${cardIdx}, ${idx})"></span>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    } else if (photos.length === 1) {
+      // Single photo
+      mediaMarkup = `
         <div class="achievement-photo-wrap">
-          <img src="${a.image}" alt="${a.title}" class="achievement-photo" loading="lazy" onerror="this.parentElement.style.display='none'">
+          <img src="${photos[0]}" alt="${a.title}" class="achievement-photo" loading="lazy" onerror="this.parentElement.style.display='none'">
         </div>
-      ` : ''}
-      <div class="achievement-top">
-        <div class="achievement-badge-icon">
-          <i class="fas ${a.icon || 'fa-trophy'}"></i>
-        </div>
-        <span class="achievement-year-badge">${a.date || '2024'}</span>
+      `;
+    }
+
+    // Action buttons (PDF Document & Real Proof Link)
+    const proofUrl = a.proofUrl || a.credentialUrl;
+    const hasActions = a.pdfUrl || proofUrl;
+    const actionsMarkup = hasActions ? `
+      <div class="achievement-actions-row">
+        ${a.pdfUrl ? `
+          <a href="${a.pdfUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-yellow achievement-btn-pdf" title="Lihat / Download File Dokumen PDF">
+            <i class="fas fa-file-pdf"></i>
+            <span>Lihat PDF</span>
+          </a>
+        ` : ''}
+        ${proofUrl ? `
+          <a href="${proofUrl}" target="_blank" rel="noopener noreferrer" class="achievement-btn-proof" title="Lihat Dokumen / Bukti Verifikasi Resmi">
+            <i class="fas fa-shield-check"></i>
+            <span>Verifikasi Resmi</span>
+          </a>
+        ` : ''}
       </div>
-      <h3 class="achievement-title">${a.title}</h3>
-      <div class="achievement-org">${a.organization}</div>
-      <p class="achievement-desc">${a.description}</p>
-    </div>
-  `).join('');
+    ` : '';
+
+    return `
+      <div class="achievement-card">
+        ${mediaMarkup}
+        <div class="achievement-top">
+          <div class="achievement-badge-icon">
+            <i class="fas ${a.icon || 'fa-trophy'}"></i>
+          </div>
+          <span class="achievement-year-badge">${a.date || '2024'}</span>
+        </div>
+        <h3 class="achievement-title">${a.title}</h3>
+        <div class="achievement-org">${a.organization}</div>
+        <p class="achievement-desc">${a.description}</p>
+        ${actionsMarkup}
+      </div>
+    `;
+  }).join('');
 
   // Update counter in stats
   const counterEl = document.getElementById('achievementCountStat');
@@ -345,6 +435,55 @@ function renderAchievements() {
     counterEl.textContent = `${allAchievements.length}+`;
   }
 }
+
+// Global Slider Controls for Achievements
+window.slideAchievementPhoto = (cardIdx, direction) => {
+  const slider = document.getElementById(`ach-slider-${cardIdx}`);
+  if (!slider) return;
+
+  let current = parseInt(slider.getAttribute('data-current') || '0', 10);
+  const total = parseInt(slider.getAttribute('data-total') || '1', 10);
+
+  current = (current + direction + total) % total;
+  slider.setAttribute('data-current', current);
+
+  const imgs = slider.querySelectorAll('.achievement-slide-img');
+  imgs.forEach((img, i) => {
+    img.classList.toggle('active', i === current);
+  });
+
+  const numSpan = slider.querySelector('.current-slide-num');
+  if (numSpan) numSpan.textContent = current + 1;
+
+  const dots = slider.querySelectorAll('.slider-dot');
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === current);
+  });
+
+  popSound.playPop(540, 0.05);
+};
+
+window.goToAchievementPhoto = (cardIdx, targetIdx) => {
+  const slider = document.getElementById(`ach-slider-${cardIdx}`);
+  if (!slider) return;
+
+  slider.setAttribute('data-current', targetIdx);
+
+  const imgs = slider.querySelectorAll('.achievement-slide-img');
+  imgs.forEach((img, i) => {
+    img.classList.toggle('active', i === targetIdx);
+  });
+
+  const numSpan = slider.querySelector('.current-slide-num');
+  if (numSpan) numSpan.textContent = targetIdx + 1;
+
+  const dots = slider.querySelectorAll('.slider-dot');
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === targetIdx);
+  });
+
+  popSound.playPop(540, 0.05);
+};
 
 // ==========================================
 // 7. Skills Filter System
@@ -404,6 +543,7 @@ async function initFirebaseSync() {
     onValue(ref(database, 'profile'), snapshot => {
       const data = snapshot.val();
       if (data) {
+        currentProfile = { ...DEFAULT_PROFILE, ...data };
         if (data.photo) {
           const avatar = document.getElementById('aboutAvatarImg');
           if (avatar) avatar.src = data.photo;
@@ -415,9 +555,20 @@ async function initFirebaseSync() {
           }
         }
         if (data.name) {
+          const heroName = document.getElementById('heroName');
+          if (heroName) heroName.textContent = data.name;
+          const aboutName = document.getElementById('aboutName');
+          if (aboutName) aboutName.textContent = data.name;
           const heroTitle = document.querySelector('.hero-title');
           if (heroTitle && data.role) {
             heroTitle.innerHTML = `<span class="bubble-highlight-blue">${data.name}</span> is a<br><span class="bubble-highlight-yellow">${data.role}</span>`;
+          }
+        }
+        if (data.whatsapp) {
+          const waBadge = document.querySelector('a[aria-label="WhatsApp"]');
+          if (waBadge) {
+            const cleanWa = data.whatsapp.replace(/[^0-9]/g, '');
+            waBadge.href = `https://wa.me/${cleanWa}`;
           }
         }
         if (data.tagline) {
@@ -466,6 +617,7 @@ async function initFirebaseSync() {
             if (el) el.textContent = data.stats.achievements;
           }
         }
+        updateResumeModalUI();
       }
     });
 
@@ -489,6 +641,7 @@ async function initFirebaseSync() {
         if (projectCountStat) {
           projectCountStat.textContent = `${allProjects.length}+`;
         }
+        updateResumeModalUI();
       }
     });
 
@@ -496,16 +649,25 @@ async function initFirebaseSync() {
     onValue(ref(database, 'achievements'), snapshot => {
       const data = snapshot.val();
       if (data && Object.keys(data).length > 0) {
-        allAchievements = Object.entries(data).map(([id, a]) => ({
-          id,
-          title: a.title || 'Achievement',
-          organization: a.organization || 'Organization',
-          date: a.date || '2024',
-          icon: a.icon || 'fa-trophy',
-          image: a.image || '',
-          description: a.description || ''
-        }));
+        allAchievements = Object.entries(data).map(([id, a]) => {
+          const imgs = (a.images && Array.isArray(a.images) && a.images.length > 0)
+            ? a.images
+            : (a.image ? [a.image] : []);
+          return {
+            id,
+            title: a.title || 'Achievement',
+            organization: a.organization || 'Organization',
+            date: a.date || '2024',
+            icon: a.icon || 'fa-trophy',
+            image: imgs[0] || a.image || '',
+            images: imgs,
+            pdfUrl: a.pdfUrl || '',
+            proofUrl: a.proofUrl || a.credentialUrl || '',
+            description: a.description || ''
+          };
+        });
         renderAchievements();
+        updateResumeModalUI();
       }
     });
 
@@ -513,6 +675,7 @@ async function initFirebaseSync() {
     onValue(ref(database, 'skills'), snapshot => {
       const data = snapshot.val();
       if (data && Object.keys(data).length > 0) {
+        allSkills = Object.values(data);
         const grid = document.getElementById('skillsGrid');
         if (grid) {
           grid.innerHTML = Object.entries(data).map(([id, s]) => `
@@ -530,6 +693,7 @@ async function initFirebaseSync() {
           `).join('');
           initSkillsFilter();
         }
+        updateResumeModalUI();
       }
     });
   } catch (err) {
@@ -538,17 +702,138 @@ async function initFirebaseSync() {
 }
 
 // ==========================================
-// 9. Interactive Resume Modal System
+// 9. Interactive Resume Modal System & Realtime Data Sync
 // ==========================================
+function updateResumeModalUI() {
+  const profile = currentProfile || DEFAULT_PROFILE;
+
+  // 1. Header Information
+  const resumeName = document.getElementById('resumeName');
+  if (resumeName) resumeName.textContent = profile.name || DEFAULT_PROFILE.name;
+
+  const resumeRole = document.getElementById('resumeRole');
+  if (resumeRole) resumeRole.textContent = profile.role || DEFAULT_PROFILE.role;
+
+  const resumeEmail = document.getElementById('resumeEmail');
+  if (resumeEmail) resumeEmail.textContent = profile.email || DEFAULT_PROFILE.email;
+
+  const resumePhone = document.getElementById('resumePhone');
+  if (resumePhone) resumePhone.textContent = profile.whatsapp || profile.phone || DEFAULT_PROFILE.phone;
+
+  const resumeLocation = document.getElementById('resumeLocation');
+  if (resumeLocation) resumeLocation.textContent = profile.location || DEFAULT_PROFILE.location;
+
+  // Dynamic window file name
+  const modalTitle = document.getElementById('resumeModalTitle');
+  if (modalTitle && profile.name) {
+    const safeName = profile.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    modalTitle.textContent = `resume_${safeName}.pdf`;
+  }
+
+  // 2. Hire Me CTA Link
+  const hireBtn = document.getElementById('resumeHireMeBtn');
+  if (hireBtn) {
+    const email = profile.email || DEFAULT_PROFILE.email;
+    hireBtn.href = `mailto:${email}?subject=Job%20Inquiry%20-%20${encodeURIComponent(profile.name || 'Risky Dimas')}`;
+  }
+
+  // 3. Direct PDF File Download Button (If URL provided)
+  const directPdfBtn = document.getElementById('resumeDirectPdfBtn');
+  if (directPdfBtn) {
+    if (profile.resumePdfUrl && profile.resumePdfUrl.trim()) {
+      directPdfBtn.href = profile.resumePdfUrl.trim();
+      directPdfBtn.style.display = 'inline-flex';
+    } else {
+      directPdfBtn.style.display = 'none';
+    }
+  }
+
+  // 4. Professional Summary
+  const resumeSummary = document.getElementById('resumeSummary');
+  if (resumeSummary) {
+    if (profile.resumeSummary && profile.resumeSummary.trim()) {
+      resumeSummary.textContent = profile.resumeSummary.trim();
+    } else if (profile.bio) {
+      const firstPara = profile.bio.split('\n').filter(p => p.trim())[0];
+      resumeSummary.textContent = firstPara || DEFAULT_PROFILE.resumeSummary;
+    } else {
+      resumeSummary.textContent = DEFAULT_PROFILE.resumeSummary;
+    }
+  }
+
+  // 5. Core Skills Tags (Custom tags OR auto-synced from Database Tech Stack)
+  const skillsListEl = document.getElementById('resumeSkillsList');
+  if (skillsListEl) {
+    if (profile.resumeSkills && profile.resumeSkills.trim()) {
+      const tags = profile.resumeSkills.split(',').map(s => s.trim()).filter(Boolean);
+      skillsListEl.innerHTML = tags.map(t => `<span class="tech-tag">${t}</span>`).join('');
+    } else if (allSkills && allSkills.length > 0) {
+      skillsListEl.innerHTML = allSkills.map(s => `<span class="tech-tag">${s.name}</span>`).join('');
+    } else {
+      const defaultTags = DEFAULT_PROFILE.resumeSkills.split(',').map(s => s.trim()).filter(Boolean);
+      skillsListEl.innerHTML = defaultTags.map(t => `<span class="tech-tag">${t}</span>`).join('');
+    }
+  }
+
+  // 6. Key Projects & Achievements (Custom lines OR auto-synced top records)
+  const keyItemsEl = document.getElementById('resumeKeyItems');
+  if (keyItemsEl) {
+    if (profile.resumeKeyItems && profile.resumeKeyItems.trim()) {
+      const lines = profile.resumeKeyItems.split('\n').map(l => l.trim()).filter(Boolean);
+      keyItemsEl.innerHTML = lines.map(line => {
+        const parts = line.split('|');
+        const title = parts[0] ? parts[0].trim() : line;
+        const sub = parts[1] ? parts[1].trim() : '';
+        return `
+          <div class="resume-item-row">
+            <strong>${title}</strong>
+            ${sub ? `<span>${sub}</span>` : ''}
+          </div>
+        `;
+      }).join('');
+    } else {
+      const rows = [];
+      const projectsList = (allProjects && allProjects.length > 0) ? allProjects : DEFAULT_PROJECTS;
+      const certsList = (allAchievements && allAchievements.length > 0) ? allAchievements : DEFAULT_ACHIEVEMENTS;
+
+      projectsList.slice(0, 2).forEach(p => {
+        rows.push(`
+          <div class="resume-item-row">
+            <strong>${p.title}</strong>
+            <span>${p.categoryLabel || 'Design'}</span>
+          </div>
+        `);
+      });
+
+      certsList.slice(0, 1).forEach(a => {
+        rows.push(`
+          <div class="resume-item-row">
+            <strong>${a.title}</strong>
+            <span>${a.organization || 'Achievement'} • ${a.date || '2024'}</span>
+          </div>
+        `);
+      });
+
+      if (rows.length > 0) {
+        keyItemsEl.innerHTML = rows.join('');
+      }
+    }
+  }
+}
+
 function initResumeModal() {
   const openBtns = document.querySelectorAll('.open-resume-modal-btn');
   const modal = document.getElementById('resumeModal');
   const closeBtn = document.getElementById('closeResumeModalBtn');
   const printBtn = document.getElementById('printResumeBtn');
 
+  // Initial render with default or current profile
+  updateResumeModalUI();
+
   if (!modal) return;
 
   function openModal() {
+    updateResumeModalUI();
     popSound.playPop(580, 0.1);
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';

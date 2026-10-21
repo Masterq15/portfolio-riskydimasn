@@ -11,7 +11,7 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Admin Stylesheet -->
-    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="css/admin-style.css">
 </head>
 <body>
 
@@ -123,7 +123,7 @@
                 <button type="button" class="nav-item-btn" data-tab="profile">
                     <div class="nav-item-btn-left">
                         <i class="fas fa-user-gear"></i>
-                        <span>Profile Settings</span>
+                        <span>Profile & Resume</span>
                     </div>
                 </button>
             </nav>
@@ -322,7 +322,7 @@
 
                                     <button type="button" class="btn btn-rect" style="width: 100%; justify-content: flex-start;" onclick="switchTab('profile')">
                                         <i class="fas fa-user-edit"></i>
-                                        <span>Edit Profile, Bio & Social Links</span>
+                                        <span>Edit Profile, Bio & Resume Modal</span>
                                     </button>
                                 </div>
                             </div>
@@ -479,9 +479,23 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="achievementImage" class="form-label">Photo / Certificate Image URL (Optional)</label>
-                                    <input type="url" id="achievementImage" class="form-control" placeholder="https://images.unsplash.com/... or Imgur direct link">
-                                    <span class="form-help">Paste image link for certificate, trophy, or winner photo</span>
+                                    <label for="achievementImages" class="form-label"><i class="fas fa-images" style="color: var(--secondary-accent);"></i> Foto Dokumentasi & Sertifikat (Bisa >1 Foto, Slider Aktif!)</label>
+                                    <textarea id="achievementImages" class="form-control" rows="2" placeholder="https://images.unsplash.com/... (1 baris per link jika lebih dari 1 foto)"></textarea>
+                                    <span class="form-help">Masukkan 1 atau beberapa URL gambar (foto panggung, piala, lembar sertifikat fisik). Jika lebih dari 1, pengunjung bisa menggeser / slide foto di website!</span>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="achievementPdfUrl" class="form-label"><i class="fas fa-file-pdf" style="color: var(--primary-accent);"></i> Link File PDF / Dokumen Sertifikat (Opsional)</label>
+                                        <input type="url" id="achievementPdfUrl" class="form-control" placeholder="https://drive.google.com/... atau link PDF langsung">
+                                        <span class="form-help">Jika diisi, tombol 'Lihat PDF' akan muncul di kartu website.</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="achievementProofUrl" class="form-label"><i class="fas fa-shield-check" style="color: var(--green-accent);"></i> Link Verifikasi Resmi (Opsional)</label>
+                                        <input type="url" id="achievementProofUrl" class="form-control" placeholder="https://credly.com/... atau link berita turnamen / medsos resmi">
+                                        <span class="form-help">Opsional: Link bukti keaslian prestasi (Credly, Coursera, berita pemenang, post medsos).</span>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -753,14 +767,20 @@
                                 <!-- Contact Info -->
                                 <div class="form-grid">
                                     <div class="form-group">
-                                        <label for="profileEmail" class="form-label">Contact Email</label>
+                                        <label for="profileEmail" class="form-label"><i class="fas fa-envelope" style="color: var(--primary-accent);"></i> Contact Email</label>
                                         <input type="email" id="profileEmail" class="form-control" placeholder="riskydimasnu@gmail.com">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="profileWhatsapp" class="form-label">WhatsApp Number / Link</label>
+                                        <label for="profileWhatsapp" class="form-label"><i class="fab fa-whatsapp" style="color: var(--green-accent);"></i> WhatsApp Number / Link</label>
                                         <input type="text" id="profileWhatsapp" class="form-control" placeholder="+62 813-2895-9495">
                                     </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileLocation" class="form-label"><i class="fas fa-map-marker-alt" style="color: var(--primary-accent);"></i> Location / Country</label>
+                                    <input type="text" id="profileLocation" class="form-control" placeholder="Indonesia" value="Indonesia">
+                                    <span class="form-help">Domisili atau lokasi yang tampil di profil About dan Header Resume modal</span>
                                 </div>
 
                                 <!-- Fun Stats Numbers -->
@@ -795,6 +815,50 @@
                                     <label for="profileStickers" class="form-label"><i class="fas fa-tags" style="color: var(--pink-accent);"></i> Hero Pop-Art Stickers & Badges</label>
                                     <textarea id="profileStickers" class="form-control" rows="3" placeholder="Contoh: 👍 100% COOL, ✌️ PEACE & VIBES, 🔥 HOT STUFF">👍 100% COOL, ✌️ PEACE & VIBES, ★ "I Design it! And they like it", 😊 STAY PLAYFUL, ▶ START, 🔥 HOT STUFF</textarea>
                                     <span class="form-help">Teks stiker asli sudah terisi di dalam kotak ini. Kamu bisa edit, tambah, atau hapus teksnya langsung!</span>
+                                </div>
+
+                                <!-- ================= RESUME / CV MODAL SETTINGS ================= -->
+                                <div style="margin: 28px 0; padding: 22px; background: rgba(255, 230, 0, 0.12); border: var(--border-width) dashed var(--border-color); border-radius: var(--radius-lg);">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--secondary-accent); border: var(--border-width-sm) solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #000; box-shadow: var(--shadow-xs);">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </div>
+                                            <div>
+                                                <h3 style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; margin: 0;">Pengaturan Pop-up Resume / CV Modal</h3>
+                                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 3px 0 0;">Otomatis tersinkron dengan Nama, Role, Kontak, Skills & Projects dari database!</p>
+                                            </div>
+                                        </div>
+                                        <span class="item-pill-tag" style="background: var(--green-accent); color: #000; font-weight: 700;"><i class="fas fa-arrows-rotate"></i> REALTIME AUTO-SYNC</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profileResumeSummary" class="form-label"><i class="fas fa-align-left" style="color: var(--primary-accent);"></i> Professional Summary (Khusus Resume)</label>
+                                        <textarea id="profileResumeSummary" class="form-control" rows="3" placeholder="Dynamic UI/UX designer and creative frontend builder specializing in user-centric interfaces, design systems, and engaging micro-interactions.">Dynamic UI/UX designer and creative frontend builder specializing in user-centric interfaces, design systems, and engaging micro-interactions. Proven track record in rapid prototyping, competitive esports team leadership, and content creation.</textarea>
+                                        <span class="form-help">Ringkasan profesional yang tampil di modal resume. Jika dikosongkan, otomatis mengambil paragraf bio di atas!</span>
+                                    </div>
+
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="profileResumeSkills" class="form-label"><i class="fas fa-tags" style="color: var(--secondary-accent);"></i> Custom Core Skills Tags (Opsional)</label>
+                                            <input type="text" id="profileResumeSkills" class="form-control" value="UI/UX Design, Figma & Prototyping, Wireframing, Design Systems, HTML5 / Vanilla CSS, JavaScript (ES6+), Adobe Photoshop, CapCut Video Production" placeholder="UI/UX Design, Figma & Prototyping, Wireframing, Design Systems, HTML5 / Vanilla CSS, JavaScript (ES6+), Adobe Photoshop, CapCut Video Production">
+                                            <span class="form-help">Pisahkan dengan koma. Kosongkan jika ingin otomatis mengambil dari daftar Tech Stack yang aktif di database!</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="profileResumePdfUrl" class="form-label"><i class="fas fa-link" style="color: var(--pink-accent);"></i> Link File PDF Asli (Opsional)</label>
+                                            <input type="url" id="profileResumePdfUrl" class="form-control" placeholder="https://drive.google.com/... atau link PDF langsung">
+                                            <span class="form-help">Jika diisi, tombol 'Download PDF File' akan aktif di modal resume agar pengunjung bisa langsung download file asli.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="profileResumeKeyItems" class="form-label"><i class="fas fa-star" style="color: var(--green-accent);"></i> Custom Key Projects & Highlights (Opsional)</label>
+                                        <textarea id="profileResumeKeyItems" class="form-control" rows="3" placeholder="Neon Pulse - Mobile Streaming Interface | Figma Design System • 2024">Neon Pulse - Mobile Streaming Interface | Figma Design System • 2024
+1st Place Winner - Regional Esports Championship | National Youth Gaming League • 2024
+PixelCraft Studio Portfolio Web | Interactive Frontend Architecture • 2023</textarea>
+                                        <span class="form-help">Format: <code>Judul | Subtitle atau Tahun</code> (1 baris per item). Kosongkan untuk otomatis mengambil proyek & sertifikat dari database!</span>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-yellow btn-rect">
@@ -1039,6 +1103,12 @@
                 date: "2024",
                 icon: "fa-trophy",
                 image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                images: [
+                    "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80"
+                ],
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                proofUrl: "https://www.instagram.com/ig.masterq",
                 description: "Led team tactics, communication strategy, and game-sense execution to triumph over 64 competing teams in the grand final."
             },
             {
@@ -1048,6 +1118,12 @@
                 date: "2023",
                 icon: "fa-award",
                 image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+                images: [
+                    "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80"
+                ],
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                proofUrl: "https://www.figma.com",
                 description: "Recognized for high-impact visual design innovation and accessible component architecture in student portfolio competition."
             },
             {
@@ -1057,6 +1133,11 @@
                 date: "2023",
                 icon: "fa-certificate",
                 image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+                images: [
+                    "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
+                ],
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                proofUrl: "https://credly.com",
                 description: "Completed intensive design sprint covering wireframing, heuristic evaluation, usability testing, and interactive prototyping."
             },
             {
@@ -1066,6 +1147,11 @@
                 date: "2022",
                 icon: "fa-fire",
                 image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80",
+                images: [
+                    "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80"
+                ],
+                pdfUrl: "",
+                proofUrl: "https://www.tiktok.com/@masterqqq",
                 description: "Produced aesthetic design breakdown reels and editing tutorials reaching over 100,000 organic impressions across TikTok and Instagram."
             }
         ];
@@ -1393,7 +1479,13 @@
             document.getElementById('achievementDate').value = a.date || '';
             document.getElementById('achievementDesc').value = a.description || '';
             document.getElementById('achievementIcon').value = a.icon || 'fa-trophy';
-            document.getElementById('achievementImage').value = a.image || '';
+            
+            const imgList = (a.images && Array.isArray(a.images) && a.images.length > 0)
+                ? a.images
+                : (a.image ? [a.image] : []);
+            document.getElementById('achievementImages').value = imgList.join('\n');
+            document.getElementById('achievementPdfUrl').value = a.pdfUrl || '';
+            document.getElementById('achievementProofUrl').value = a.proofUrl || a.credentialUrl || '';
 
             const heading = document.getElementById('achievementFormHeading');
             if (heading) heading.innerHTML = '<i class="fas fa-pencil-alt" style="color: var(--secondary-accent);"></i> Edit Certificate: ' + a.title;
@@ -1429,7 +1521,13 @@
             document.getElementById('achievementDate').value = a.date || '';
             document.getElementById('achievementDesc').value = a.description || '';
             document.getElementById('achievementIcon').value = a.icon || 'fa-trophy';
-            document.getElementById('achievementImage').value = a.image || '';
+            
+            const imgList = (a.images && Array.isArray(a.images) && a.images.length > 0)
+                ? a.images
+                : (a.image ? [a.image] : []);
+            document.getElementById('achievementImages').value = imgList.join('\n');
+            document.getElementById('achievementPdfUrl').value = a.pdfUrl || '';
+            document.getElementById('achievementProofUrl').value = a.proofUrl || a.credentialUrl || '';
 
             const heading = document.getElementById('achievementFormHeading');
             if (heading) heading.innerHTML = '<i class="fas fa-magic" style="color: var(--primary-accent);"></i> Edit & Publish Default Certificate: ' + a.title;
@@ -1459,13 +1557,19 @@
             const a = DEFAULT_ACHIEVEMENTS[idx];
             if (!a) return;
             try {
+                const imgList = (a.images && Array.isArray(a.images) && a.images.length > 0)
+                    ? a.images
+                    : (a.image ? [a.image] : []);
                 const payload = {
                     title: a.title,
                     organization: a.organization,
                     date: a.date,
                     description: a.description,
                     icon: a.icon,
-                    image: a.image,
+                    image: imgList[0] || a.image || '',
+                    images: imgList,
+                    pdfUrl: a.pdfUrl || '',
+                    proofUrl: a.proofUrl || '',
                     createdAt: Date.now()
                 };
                 await set(ref(database, 'achievements/' + a.id), payload);
@@ -1478,13 +1582,19 @@
         window.seedAchievementsToFirebase = async (silent = false) => {
             try {
                 for (const a of DEFAULT_ACHIEVEMENTS) {
+                    const imgList = (a.images && Array.isArray(a.images) && a.images.length > 0)
+                        ? a.images
+                        : (a.image ? [a.image] : []);
                     const payload = {
                         title: a.title,
                         organization: a.organization,
                         date: a.date,
                         description: a.description,
                         icon: a.icon,
-                        image: a.image,
+                        image: imgList[0] || a.image || '',
+                        images: imgList,
+                        pdfUrl: a.pdfUrl || '',
+                        proofUrl: a.proofUrl || '',
                         createdAt: Date.now()
                     };
                     await set(ref(database, 'achievements/' + a.id), payload);
@@ -1516,13 +1626,27 @@
 
         document.getElementById('addAchievementForm').addEventListener('submit', (e) => {
             e.preventDefault();
+
+            // Parse multiple images from textarea (split by newline or comma)
+            const rawImagesVal = document.getElementById('achievementImages').value || '';
+            const imagesArray = rawImagesVal
+                .split(/[\n,]+/)
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+
+            const pdfVal = (document.getElementById('achievementPdfUrl').value || '').trim();
+            const proofVal = (document.getElementById('achievementProofUrl').value || '').trim();
+
             const payload = {
-                title: document.getElementById('achievementTitle').value,
-                organization: document.getElementById('achievementOrg').value,
-                date: document.getElementById('achievementDate').value,
-                description: document.getElementById('achievementDesc').value,
+                title: document.getElementById('achievementTitle').value.trim(),
+                organization: document.getElementById('achievementOrg').value.trim(),
+                date: document.getElementById('achievementDate').value.trim(),
+                description: document.getElementById('achievementDesc').value.trim(),
                 icon: document.getElementById('achievementIcon').value || 'fa-trophy',
-                image: document.getElementById('achievementImage').value || '',
+                image: imagesArray[0] || '',
+                images: imagesArray,
+                pdfUrl: pdfVal,
+                proofUrl: proofVal,
                 updatedAt: Date.now()
             };
 
@@ -1561,21 +1685,37 @@
             `;
 
             DEFAULT_ACHIEVEMENTS.forEach((a, idx) => {
+                const photos = (a.images && Array.isArray(a.images) && a.images.length > 0)
+                    ? a.images
+                    : (a.image ? [a.image] : []);
+
                 list.innerHTML += `
                     <div class="project-item">
                         <div class="project-info">
-                            ${a.image ? `
-                                <img src="${a.image}" alt="${a.title}" onerror="this.style.display='none'">
-                            ` : `
-                                <div style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--secondary-accent); border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs); flex-shrink: 0;">
-                                    <i class="fas ${a.icon || 'fa-trophy'}" style="font-size: 1.8rem; color: #000000;"></i>
-                                </div>
-                            `}
+                            <div style="position: relative; width: 80px; height: 80px; flex-shrink: 0;">
+                                ${photos.length > 0 ? `
+                                    <img src="${photos[0]}" alt="${a.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color);" onerror="this.style.display='none'">
+                                    ${photos.length > 1 ? `
+                                        <span style="position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.85); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 1px 5px; border-radius: 4px;">
+                                            <i class="fas fa-images"></i> ${photos.length}
+                                        </span>
+                                    ` : ''}
+                                ` : `
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--secondary-accent); border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs);">
+                                        <i class="fas ${a.icon || 'fa-trophy'}" style="font-size: 1.8rem; color: #000000;"></i>
+                                    </div>
+                                `}
+                            </div>
                             <div class="item-text">
                                 <h3>${a.title}</h3>
                                 <p><strong>${a.organization}</strong> • ${a.date}</p>
                                 <p style="margin-top: 4px;">${a.description}</p>
-                                <span class="item-pill-tag" style="background: var(--green-accent); color: #000;"><i class="fas fa-globe"></i> Default Web Certificate</span>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                                    <span class="item-pill-tag" style="background: var(--green-accent); color: #000;"><i class="fas fa-globe"></i> Default</span>
+                                    ${photos.length > 1 ? `<span class="item-pill-tag" style="background: var(--secondary-accent); color: #000;"><i class="fas fa-images"></i> ${photos.length} Foto (Slider)</span>` : (photos.length === 1 ? `<span class="item-pill-tag" style="background: #e2e8f0; color: #000;"><i class="fas fa-image"></i> 1 Foto</span>` : '')}
+                                    ${a.pdfUrl ? `<span class="item-pill-tag" style="background: var(--primary-accent); color: #fff;"><i class="fas fa-file-pdf"></i> Ada PDF</span>` : ''}
+                                    ${(a.proofUrl || a.credentialUrl) ? `<span class="item-pill-tag" style="background: var(--yellow-accent); color: #000;"><i class="fas fa-shield-check"></i> Verifikasi Resmi</span>` : ''}
+                                </div>
                             </div>
                         </div>
                         <div class="project-actions">
@@ -1607,21 +1747,36 @@
                 list.innerHTML = '';
                 if (hasData) {
                     Object.entries(data).forEach(([id, a]) => {
+                        const photos = (a.images && Array.isArray(a.images) && a.images.length > 0)
+                            ? a.images
+                            : (a.image ? [a.image] : []);
+
                         list.innerHTML += `
                             <div class="project-item">
                                 <div class="project-info">
-                                    ${a.image ? `
-                                        <img src="${a.image}" alt="${a.title}" onerror="this.style.display='none'">
-                                    ` : `
-                                        <div style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--secondary-accent); border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs); flex-shrink: 0;">
-                                            <i class="fas ${a.icon || 'fa-trophy'}" style="font-size: 1.8rem; color: #000000;"></i>
-                                        </div>
-                                    `}
+                                    <div style="position: relative; width: 80px; height: 80px; flex-shrink: 0;">
+                                        ${photos.length > 0 ? `
+                                            <img src="${photos[0]}" alt="${a.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color);" onerror="this.style.display='none'">
+                                            ${photos.length > 1 ? `
+                                                <span style="position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.85); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 1px 5px; border-radius: 4px;">
+                                                    <i class="fas fa-images"></i> ${photos.length}
+                                                </span>
+                                            ` : ''}
+                                        ` : `
+                                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--secondary-accent); border-radius: var(--radius-md); border: var(--border-width-sm) solid var(--border-color); box-shadow: var(--shadow-xs);">
+                                                <i class="fas ${a.icon || 'fa-trophy'}" style="font-size: 1.8rem; color: #000000;"></i>
+                                            </div>
+                                        `}
+                                    </div>
                                     <div class="item-text">
                                         <h3>${a.title}</h3>
                                         <p><strong>${a.organization}</strong> • ${a.date}</p>
                                         <p style="margin-top: 4px;">${a.description}</p>
-                                        ${a.image ? `<span class="item-pill-tag" style="background: var(--green-accent);"><i class="fas fa-image"></i> Certificate Photo Attached</span>` : ''}
+                                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                                            ${photos.length > 1 ? `<span class="item-pill-tag" style="background: var(--secondary-accent); color: #000;"><i class="fas fa-images"></i> ${photos.length} Foto (Slider)</span>` : (photos.length === 1 ? `<span class="item-pill-tag" style="background: #e2e8f0; color: #000;"><i class="fas fa-image"></i> 1 Foto</span>` : '')}
+                                            ${a.pdfUrl ? `<span class="item-pill-tag" style="background: var(--primary-accent); color: #fff;"><i class="fas fa-file-pdf"></i> Ada PDF</span>` : ''}
+                                            ${(a.proofUrl || a.credentialUrl) ? `<span class="item-pill-tag" style="background: var(--yellow-accent); color: #000;"><i class="fas fa-shield-check"></i> Verifikasi Resmi</span>` : ''}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="project-actions">
@@ -2123,7 +2278,7 @@
             }
         };
 
-        // 11. PROFILE SETTINGS - Update & Load
+        // 11. PROFILE SETTINGS & RESUME - Update & Load
         document.getElementById('updateProfileForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const profileData = {
@@ -2134,9 +2289,14 @@
                 bio: document.getElementById('profileBio').value,
                 email: document.getElementById('profileEmail').value,
                 whatsapp: document.getElementById('profileWhatsapp').value,
+                location: document.getElementById('profileLocation').value.trim() || 'Indonesia',
                 logoText: document.getElementById('profileLogoText').value.trim() || 'R',
                 badgeTag: document.getElementById('profileBadgeTag').value.trim() || 'Available for Exciting Projects',
                 stickers: document.getElementById('profileStickers').value.trim(),
+                resumeSummary: document.getElementById('profileResumeSummary').value.trim(),
+                resumeSkills: document.getElementById('profileResumeSkills').value.trim(),
+                resumePdfUrl: document.getElementById('profileResumePdfUrl').value.trim(),
+                resumeKeyItems: document.getElementById('profileResumeKeyItems').value.trim(),
                 stats: {
                     projects: document.getElementById('statProjects').value,
                     achievements: document.getElementById('statAchievements').value
@@ -2145,7 +2305,7 @@
             };
 
             update(profileRef, profileData).then(() => {
-                showNotification('Profile updated & synced to portfolio website! ✨', 'success');
+                showNotification('Profile & Resume settings updated and synced to website! ✨', 'success');
             }).catch(err => {
                 showNotification('Error updating profile: ' + err.message, 'error');
             });
@@ -2173,12 +2333,23 @@
                     document.getElementById('profileEmail').value = data.email;
                 if (data.whatsapp && active !== document.getElementById('profileWhatsapp')) 
                     document.getElementById('profileWhatsapp').value = data.whatsapp;
+                if (data.location && active !== document.getElementById('profileLocation')) 
+                    document.getElementById('profileLocation').value = data.location;
                 if (data.logoText !== undefined && active !== document.getElementById('profileLogoText')) 
                     document.getElementById('profileLogoText').value = data.logoText;
                 if (data.badgeTag !== undefined && active !== document.getElementById('profileBadgeTag')) 
                     document.getElementById('profileBadgeTag').value = data.badgeTag;
                 if (data.stickers !== undefined && active !== document.getElementById('profileStickers')) 
                     document.getElementById('profileStickers').value = data.stickers;
+                if (data.resumeSummary !== undefined && active !== document.getElementById('profileResumeSummary')) 
+                    document.getElementById('profileResumeSummary').value = data.resumeSummary;
+                if (data.resumeSkills !== undefined && active !== document.getElementById('profileResumeSkills')) 
+                    document.getElementById('profileResumeSkills').value = data.resumeSkills;
+                if (data.resumePdfUrl !== undefined && active !== document.getElementById('profileResumePdfUrl')) 
+                    document.getElementById('profileResumePdfUrl').value = data.resumePdfUrl;
+                if (data.resumeKeyItems !== undefined && active !== document.getElementById('profileResumeKeyItems')) 
+                    document.getElementById('profileResumeKeyItems').value = data.resumeKeyItems;
+
                 if (data.stats) {
                     if (data.stats.projects && active !== document.getElementById('statProjects')) 
                         document.getElementById('statProjects').value = data.stats.projects;
@@ -2187,14 +2358,29 @@
                 }
 
                 if (currentProfile) {
+                    const resumePreviewText = data.resumeSummary || (data.bio ? data.bio.split('\n')[0] : 'Dynamic UI/UX designer and creative frontend builder...');
                     currentProfile.innerHTML = `
                         <div style="display: flex; gap: 20px; align-items: start; flex-wrap: wrap;">
                             <img src="${data.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'}" alt="Avatar" style="width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-lg); border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-sm);">
                             <div style="flex: 1; min-width: 240px;">
                                 <h4 style="font-family: var(--font-display); font-size: 1.3rem;">${data.name || 'Risky Dimas Nugroho'}</h4>
-                                <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--primary-accent); margin-bottom: 8px;"><strong>${data.role || 'Creative Designer'}</strong></p>
+                                <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--primary-accent); margin-bottom: 4px;"><strong>${data.role || 'Creative Designer'}</strong></p>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;"><i class="fas fa-map-marker-alt"></i> ${data.location || 'Indonesia'} &bull; <i class="fas fa-envelope"></i> ${data.email || 'riskydimasnu@gmail.com'} &bull; <i class="fab fa-whatsapp"></i> ${data.whatsapp || '+62 813-2895-9495'}</p>
                                 <p style="font-size: 0.92rem; line-height: 1.6;">${(data.bio || 'No bio set').replace(/\n/g, '<br>')}</p>
                             </div>
+                        </div>
+
+                        <!-- Resume Sync Status Preview Card -->
+                        <div style="margin-top: 18px; padding: 14px 18px; background: var(--bg-card); border: var(--border-width-sm) solid var(--border-color); border-radius: var(--radius-md); box-shadow: var(--shadow-xs);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                                <strong style="font-family: var(--font-display); font-size: 0.98rem;"><i class="fas fa-file-pdf" style="color: var(--primary-accent);"></i> Resume / CV Pop-up Synchronized</strong>
+                                <span class="item-pill-tag" style="background: var(--yellow-accent); color: #000; font-size: 0.72rem; padding: 3px 8px;">AUTO-SYNCED</span>
+                            </div>
+                            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px;">
+                                <strong>Professional Summary:</strong> ${resumePreviewText}
+                            </p>
+                            ${data.resumeSkills ? `<p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px;"><strong>Custom Skills:</strong> ${data.resumeSkills}</p>` : `<p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px;"><strong>Skills:</strong> Mengikuti daftar Tech Stack database secara dinamis</p>`}
+                            ${data.resumePdfUrl ? `<p style="font-size: 0.84rem; color: var(--green-accent);"><strong><i class="fas fa-check-circle"></i> Direct PDF Link:</strong> <a href="${data.resumePdfUrl}" target="_blank" style="color: var(--primary-accent); text-decoration: underline;">${data.resumePdfUrl}</a></p>` : `<p style="font-size: 0.82rem; color: var(--text-muted);"><strong>File PDF:</strong> Pengunjung mencetak / save PDF via pop-up browser</p>`}
                         </div>
                     `;
                 }
