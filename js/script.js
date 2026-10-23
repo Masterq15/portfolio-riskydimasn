@@ -5,149 +5,220 @@
  */
 
 // ==========================================
-// 1. Curated Default Data (Instant WOW & Fallback)
+// 0. DevTools Privacy & Source Protection Shield
+// ==========================================
+(function initPrivacyShield() {
+  try {
+    // Silence verbose logs & sensitive error leaks in production
+    const noop = () => {};
+    console.log = noop;
+    console.warn = noop;
+    console.info = noop;
+    console.debug = noop;
+  } catch (e) {}
+
+  try {
+    // Custom protected environment banner
+    const origLog = Object.getPrototypeOf(console).log || console.log;
+    origLog.call(
+      console,
+      "%c 🚀 Risky Dimas Nugroho — Portfolio",
+      "background: #FFE500; color: #000000; font-weight: 800; font-size: 13px; padding: 4px 8px; border: 2px solid #000; border-radius: 4px;"
+    );
+  } catch (e) {}
+
+  // Prevent right-click inspect on page elements & images
+  document.addEventListener('contextmenu', (e) => {
+    const tag = e.target.tagName.toLowerCase();
+    if (tag !== 'input' && tag !== 'textarea') {
+      e.preventDefault();
+      if (typeof showToast === 'function') {
+        showToast("🔒 Inspect dinonaktifkan untuk melindungi privasi portfolio! ⚡");
+      }
+    }
+  });
+
+  // Shield against common DevTools inspect shortcut keys
+  document.addEventListener('keydown', (e) => {
+    const isDevKey = (
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+      (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))
+    );
+    if (isDevKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof showToast === 'function') {
+        showToast("🛡️ Akses Inspect & Source Code dilindungi demi keamanan privasi! ⚡");
+      }
+      return false;
+    }
+  });
+})();
+
+// Private module-scoped Firebase references (NEVER exposed to window)
+let _db = null;
+let _push = null;
+let _ref = null;
+
+// ==========================================
+// 1. Curated Default Data (Instant Real Data & Zero-Flash Hydration)
 // ==========================================
 const DEFAULT_PROFILE = {
   name: "Risky Dimas Nugroho",
-  role: "Creative UI/UX Designer & Frontend Explorer",
-  tagline: "Designing bold, playful & intuitive digital experiences that make people say 'WOW!'",
-  bio: "Hey there! I'm Risky Dimas Nugroho, a passionate UI/UX Designer and creative frontend enthusiast. I thrive on blending 90s Pop Art energy with modern Neo-Brutalism to craft interfaces that are not just functional, but genuinely fun to interact with.\n\nWhen I'm not in Figma fine-tuning vector curves or experimenting with playful CSS animations, you can catch me editing hype video reels on CapCut or competing in esports gaming tournaments.",
-  photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+  role: "UI/UX Designer & Competitive Gamer",
+  tagline: "Jangan Lupa Main free fire",
+  bio: "Hai, saya Risky Dimas Nugroho, mahasiswa Ilmu Komputer semester 5 dari Kebumen, Indonesia. Saya tertarik pada bagaimana teknologi dan kreativitas bisa berpadu untuk menciptakan produk digital yang tidak hanya berfungsi dengan baik, tetapi juga menyenangkan digunakan.\n\nSaya mendesain dan berkarya menggunakan Figma, Photoshop, dan CapCut, mulai dari tata letak antarmuka dan penyuntingan visual hingga konten video pendek. Saya masih menjelajahi bidang mana yang paling membuat saya bersemangat, dan setiap proyek saya anggap sebagai kesempatan untuk belajar hal baru serta mengasah gaya saya.\n\nDi luar kuliah, saya biasanya bermain game atau Olahraga lari dan lain-lain. Saya selalu terbuka pada ide-ide baru dan kesempatan untuk berkembang.",
+  photo: "https://i.imgur.com/nYlo4Wr.jpeg",
   location: "Indonesia",
   email: "riskydimasnu@gmail.com",
-  phone: "+62 813-2895-9495",
-  resumeSummary: "Dynamic UI/UX designer and creative frontend builder specializing in user-centric interfaces, design systems, and engaging micro-interactions. Proven track record in rapid prototyping, competitive esports team leadership, and content creation.",
-  resumeSkills: "UI/UX Design, Figma & Prototyping, Wireframing, Design Systems, HTML5 / Vanilla CSS, JavaScript (ES6+), Adobe Photoshop, CapCut Video Production",
+  phone: "",
+  whatsapp: "",
+  resumeSummary: "UI/UX Designer dan Frontend Developer dengan latar belakang di dunia game kompetitif. Terampil menggunakan Figma, Photoshop, dan CapCut, berpengalaman memimpin tim esports serta membuat prototipe dan konten digital.",
+  resumeSkills: "UI/UX Design, Figma & Prototyping, Wireframing, Design Systems, HTML5, CSS, JavaScript, CapCut",
   resumePdfUrl: "",
-  resumeKeyItems: "Neon Pulse - Mobile Streaming Interface | Figma Design System • 2024\n1st Place Winner - Regional Esports Championship | National Youth Gaming League • 2024\nPixelCraft Studio Portfolio Web | Interactive Frontend Architecture • 2023"
+  resumeKeyItems: "Belajar Dasar Pemrograman JavaScript | Dicoding • 2026\n1st Place Winner - Jateng DIY Community Champions Esports Tournament | Jateng DIY Community • 2024\n1st Place Winner - International Female Legends Free Fire | IFL x Community DIY Free Fire • 2024"
 };
 
-let currentProfile = { ...DEFAULT_PROFILE };
-let allSkills = [];
+// Immediate hydration from cache so refresh is instantaneous with ZERO dummy data
+let currentProfile = (() => {
+  try {
+    const cached = localStorage.getItem('porto_cache_profile');
+    if (cached) return { ...DEFAULT_PROFILE, ...JSON.parse(cached) };
+  } catch (e) {}
+  return { ...DEFAULT_PROFILE };
+})();
+
+let allSkills = (() => {
+  try {
+    const cached = localStorage.getItem('porto_cache_skills');
+    if (cached) return JSON.parse(cached);
+  } catch (e) {}
+  return [];
+})();
 
 const DEFAULT_PROJECTS = [
   {
     id: "proj-1",
-    title: "Neon Pulse - Music Streaming App",
+    title: "Rental PS APK",
     category: "uiux",
     categoryLabel: "UI/UX Design",
-    description: "A cyberpunk-infused, neo-brutalist mobile interface designed for Gen-Z audio enthusiasts. Features haptic visual waveforms and custom sticker playlists.",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
-    tags: ["Figma", "UI/UX", "Design System", "Mobile App"],
-    link: "https://www.figma.com"
-  },
-  {
-    id: "proj-2",
-    title: "PixelCraft - Retro Game Studio Web",
-    category: "web",
-    categoryLabel: "Web Development",
-    description: "An interactive studio portfolio featuring isometric 90s arcade mockups, fluid scroll physics, and custom pop-art stickers.",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
-    tags: ["HTML5", "CSS3", "JavaScript", "Animation"],
-    link: "https://github.com/Masterq15"
-  },
-  {
-    id: "proj-3",
-    title: "BiteBox - Pop Food Delivery Brand",
-    category: "branding",
-    categoryLabel: "Branding & Identity",
-    description: "Comprehensive visual branding, vector mascots, packaging designs, and high-conversion mobile onboarding screens for a viral street-food startup.",
-    image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80",
-    tags: ["Illustrator", "Photoshop", "Brand Book", "Merch"],
-    link: "https://www.instagram.com/ig.masterq"
-  },
-  {
-    id: "proj-4",
-    title: "Vortex - Esports Tournament Dashboard",
-    category: "uiux",
-    categoryLabel: "UI/UX Design",
-    description: "High-adrenaline gamer stats dashboard tracking real-time match analytics, kill feeds, and tournament leaderboards with custom dark mode brutalism.",
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
-    tags: ["Figma", "Design System", "Gaming UX", "Data Viz"],
-    link: "https://github.com/Masterq15"
-  },
-  {
-    id: "proj-5",
-    title: "ChromaKit - Neo-Brutalist UI Kit",
-    category: "branding",
-    categoryLabel: "UI/UX & Branding",
-    description: "Open-source Figma component system with 120+ modular stickers, buttons, OS dialogs, and brutalist color palettes downloaded by 4,000+ designers.",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
-    tags: ["Figma Community", "Tokens", "UI Kit", "Vector Art"],
-    link: "https://www.figma.com"
-  },
-  {
-    id: "proj-6",
-    title: "KopiSenja - Artisan Cafe E-Commerce",
-    category: "web",
-    categoryLabel: "Web Design",
-    description: "A warm, aesthetic digital storefront for Indonesian specialty beans with an interactive brew calculator and seamless checkout flow.",
-    image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
-    tags: ["UI/UX", "Responsive Web", "Vanilla JS", "Micro-copy"],
-    link: "https://github.com/Masterq15"
+    description: "Merancang desain UI/UX aplikasi Rental PS menggunakan Figma dengan fokus pada tampilan yang modern, intuitif, dan mudah digunakan. Proses perancangan meliputi pembuatan layout antarmuka, desain halaman utama, serta rancangan fitur penyewaan PlayStation.",
+    image: "https://i.imgur.com/VWn4hZF.png",
+    tags: ["Figma", "UI/UX", "Design System"],
+    link: "#"
   }
 ];
+
+let allProjects = (() => {
+  try {
+    const cached = localStorage.getItem('porto_cache_projects');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {}
+  return [...DEFAULT_PROJECTS];
+})();
 
 const DEFAULT_ACHIEVEMENTS = [
   {
     id: "ach-1",
-    title: "1st Place Winner - Regional Esports Championship",
-    organization: "National Youth Gaming League",
+    title: "Jateng DIY Community Champions - Esports Tournament",
+    organization: "Jateng DIY Community",
     date: "2024",
     icon: "fa-trophy",
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80"
-    ],
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    proofUrl: "https://www.instagram.com/ig.masterq",
-    description: "Led team tactics, communication strategy, and game-sense execution to triumph over 64 competing teams in the grand final."
+    image: "https://i.imgur.com/na4ZoOC.jpeg",
+    images: ["https://i.imgur.com/na4ZoOC.jpeg"],
+    proofUrl: "https://www.instagram.com/p/DDCXldlPxjV/",
+    pdfUrl: "",
+    description: "Berpartisipasi dalam turnamen esports Jateng DIY Community Champions dengan bersaing melawan berbagai tim dari wilayah Jawa Tengah dan Daerah Istimewa Yogyakarta (DIY)."
   },
   {
     id: "ach-2",
-    title: "Top UI/UX Design Showcase Award",
-    organization: "Creative Digital Creators Expo",
-    date: "2023",
-    icon: "fa-award",
-    image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80"
-    ],
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    proofUrl: "https://www.figma.com",
-    description: "Recognized for high-impact visual design innovation and accessible component architecture in student portfolio competition."
+    title: "INTERNATIONAL FEMALE LEGENDS FREE FIRE",
+    organization: "IFL x Community Diy Free Fire",
+    date: "2024",
+    icon: "fa-trophy",
+    image: "https://i.imgur.com/GAJC30G.jpeg",
+    images: ["https://i.imgur.com/GAJC30G.jpeg"],
+    proofUrl: "",
+    pdfUrl: "",
+    description: "Meraih Juara 1 dalam turnamen esports IFL x Community DIY yang diselenggarakan di Daerah Istimewa Yogyakarta."
   },
   {
     id: "ach-3",
-    title: "Certified Professional in UX Research & Design",
-    organization: "Digital Skill Academy",
+    title: "TEAM XAVIER - Central Gamers Indonesia Free Fire Tegal",
+    organization: "Central Gamers Indonesia",
     date: "2023",
-    icon: "fa-certificate",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
-    ],
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    proofUrl: "https://credly.com",
-    description: "Completed intensive design sprint covering wireframing, heuristic evaluation, usability testing, and interactive prototyping."
+    icon: "fa-trophy",
+    image: "https://i.imgur.com/gG9QksX.jpeg",
+    images: ["https://i.imgur.com/gG9QksX.jpeg"],
+    proofUrl: "https://www.panturapost.com/e-sport/2073257673/tim-xavier-juarai-ajang-central-gamers-indonesia-free-fire-max-tournament-2023-di-tegal",
+    pdfUrl: "",
+    description: "Berhasil meraih Juara 1 dalam turnamen Free Fire yang diselenggarakan oleh Central Gamers Indonesia."
   },
   {
     id: "ach-4",
-    title: "CapCut Creator Milestone - 100K+ Video Views",
-    organization: "Social Media Creative Community",
-    date: "2022",
-    icon: "fa-fire",
-    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80"
-    ],
-    pdfUrl: "",
-    proofUrl: "https://www.tiktok.com/@masterqqq",
-    description: "Produced aesthetic design breakdown reels and editing tutorials reaching over 100,000 organic impressions across TikTok and Instagram."
+    title: "Belajar Membuat Front-End Web untuk Pemula",
+    organization: "Dicoding",
+    date: "2026",
+    icon: "fa-certificate",
+    image: "https://i.imgur.com/vJTQKQ3.png",
+    images: ["https://i.imgur.com/vJTQKQ3.png"],
+    proofUrl: "https://www.dicoding.com/certificates/JLX1VOG6JZ72",
+    pdfUrl: "https://drive.google.com/file/d/1ydUbEUbhEwMtuiVdNtutJ7Ez-4InsY7q/view?usp=sharing",
+    description: "Membuat aplikasi front-end web yang interaktif serta memiliki fitur penyimpanan menggunakan web storage."
+  },
+  {
+    id: "ach-5",
+    title: "Belajar Dasar Pemrograman JavaScript",
+    organization: "Dicoding",
+    date: "2026",
+    icon: "fa-certificate",
+    image: "https://i.imgur.com/e0m4iCW.png",
+    images: ["https://i.imgur.com/e0m4iCW.png"],
+    proofUrl: "https://www.dicoding.com/certificates/EYX4QW2LWPDL",
+    pdfUrl: "https://drive.google.com/file/d/1eTNmxiy3XgfR2klIpWU1ya_34u1w0B8u/view?usp=sharing",
+    description: "Menguasai dasar JavaScript untuk pengembangan aplikasi web menggunakan Node.js sesuai standar industri."
+  },
+  {
+    id: "ach-6",
+    title: "Belajar Dasar Pemrograman Web",
+    organization: "Dicoding",
+    date: "2026",
+    icon: "fa-certificate",
+    image: "https://i.imgur.com/LJHQRyh.png",
+    images: ["https://i.imgur.com/LJHQRyh.png"],
+    proofUrl: "https://www.dicoding.com/certificates/MRZMW9D13PYQ",
+    pdfUrl: "https://drive.google.com/file/d/1N_Rzyw_uB9e5rMDEHvaA6fubVUV9W6xE/view?usp=sharing",
+    description: "Membahas tuntas dasar HTML dan CSS sebagai tiga fondasi pembuatan website."
+  },
+  {
+    id: "ach-7",
+    title: "Introduction to Financial Literacy",
+    organization: "Dicoding",
+    date: "2026",
+    icon: "fa-certificate",
+    image: "https://i.imgur.com/Zg0WZni.png",
+    images: ["https://i.imgur.com/Zg0WZni.png"],
+    proofUrl: "https://www.dicoding.com/certificates/72ZDJGONJZYW",
+    pdfUrl: "https://drive.google.com/file/d/1miadGzEDAbm5yourjy3NFW8cagiZDlOM/view?usp=drive_link",
+    description: "Coding Camp powered by DBS Foundation 2026 - Prinsip-prinsip dasar literasi finansial."
   }
 ];
+
+let allAchievements = (() => {
+  try {
+    const cached = localStorage.getItem('porto_cache_achievements');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {}
+  return [...DEFAULT_ACHIEVEMENTS];
+})();
+
 
 // ==========================================
 // 2. Audio Engine (Playful Subtle Pop Synthesizer)
@@ -263,7 +334,6 @@ function showToast(message) {
 // ==========================================
 // 5. Dynamic Rendering & Filtering (Projects)
 // ==========================================
-let allProjects = [...DEFAULT_PROJECTS];
 let currentProjectFilter = 'all';
 
 function renderProjects(filter = 'all') {
@@ -343,8 +413,6 @@ function initProjectFilters() {
 // ==========================================
 // 6. Dynamic Rendering (Achievements with Photo Slider & Credential Actions)
 // ==========================================
-let allAchievements = [...DEFAULT_ACHIEVEMENTS];
-
 function renderAchievements() {
   const grid = document.getElementById('achievementsGrid');
   if (!grid) return;
@@ -514,110 +582,163 @@ function initSkillsFilter() {
 }
 
 // ==========================================
-// 8. Firebase Realtime Database Integration
+// 8. Firebase Realtime Database Integration & Privacy Obfuscation
 // ==========================================
+function applyProfileToDOM(p) {
+  if (!p) return;
+
+  // 1. Photo
+  if (p.photo) {
+    const avatar = document.getElementById('aboutAvatarImg');
+    if (avatar) avatar.src = p.photo;
+  }
+
+  // 2. Name & Role with Hero Badge
+  const heroTitle = document.querySelector('.hero-title');
+  if (heroTitle) {
+    const nameStr = p.name || 'Risky Dimas Nugroho';
+    const roleStr = p.role || 'UI/UX Designer & Competitive Gamer';
+    heroTitle.innerHTML = `<span class="bubble-highlight-blue">${nameStr} <span class="hero-name-badge" title="Official Portfolio" aria-hidden="true"><i class="fas fa-check"></i></span></span> is a<br><span class="bubble-highlight-yellow">${roleStr}</span>`;
+  }
+
+  const aboutName = document.getElementById('aboutName');
+  if (aboutName && p.name) aboutName.textContent = p.name;
+
+  // 3. Tagline / Subtitle
+  const sub = document.querySelector('.hero-subtitle');
+  if (sub && p.tagline) sub.textContent = p.tagline;
+
+  // 4. Bio Paragraphs
+  if (p.bio) {
+    const bioEl = document.getElementById('aboutBioParagraphs');
+    if (bioEl) {
+      bioEl.innerHTML = p.bio.split('\n').filter(Boolean).map(text => `<p>${text}</p>`).join('');
+    }
+  }
+
+  // 5. Logo Text & Tag
+  if (p.logoText !== undefined && p.logoText !== '') {
+    const brandFlower = document.querySelector('.brand-flower');
+    if (brandFlower) brandFlower.textContent = p.logoText;
+  }
+  if (p.badgeTag) {
+    const badgeSpan = document.querySelector('.hero-badge-tag span');
+    if (badgeSpan) badgeSpan.textContent = p.badgeTag;
+  }
+
+  // 6. Stickers
+  if (p.stickers) {
+    const row = document.getElementById('heroStickersRow');
+    if (row) {
+      const stickerClasses = ['sticker-thumbs', 'sticker-peace', 'sticker-banner', 'sticker-smiley', 'sticker-start', 'sticker-hot'];
+      let items = [];
+      if (Array.isArray(p.stickers)) {
+        items = p.stickers;
+      } else if (typeof p.stickers === 'string') {
+        items = p.stickers.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+      }
+      if (items.length > 0) {
+        row.innerHTML = items.map((stk, idx) => {
+          const cls = stickerClasses[idx % stickerClasses.length];
+          return `<div class="sticker-badge ${cls}"><span>${stk}</span></div>`;
+        }).join('');
+
+        row.querySelectorAll('.sticker-badge').forEach(sticker => {
+          sticker.addEventListener('mouseenter', () => {
+            popSound.playPop(640, 0.06);
+          });
+        });
+      }
+    }
+  }
+
+  // 7. Contact Channels & Privacy Guard
+  const waCard = document.getElementById('contactWhatsappChannel');
+  const waBadge = document.getElementById('contactWaBadge');
+  const waText = document.getElementById('contactWhatsappText');
+  const emailCard = document.getElementById('contactEmailChannel');
+  const emailText = document.getElementById('contactEmailText');
+
+  if (p.email && p.email.trim() !== '') {
+    if (emailCard) emailCard.href = `mailto:${p.email}`;
+    if (emailText) emailText.textContent = p.email;
+  }
+
+  if (p.whatsapp && p.whatsapp.trim() !== '') {
+    const cleanWa = p.whatsapp.replace(/[^0-9]/g, '');
+    if (waCard) {
+      waCard.style.display = 'flex';
+      waCard.href = `https://wa.me/${cleanWa}`;
+      if (waText) waText.textContent = p.whatsapp;
+    }
+    if (waBadge) {
+      waBadge.style.display = 'inline-flex';
+      waBadge.href = `https://wa.me/${cleanWa}`;
+    }
+  } else {
+    // Hide phone / WhatsApp if empty to protect privacy
+    if (waCard) waCard.style.display = 'none';
+    if (waBadge) waBadge.style.display = 'none';
+  }
+
+  // 8. Stats Counter
+  if (p.stats) {
+    if (p.stats.projects) {
+      const el = document.getElementById('projectCountStat');
+      if (el) el.textContent = p.stats.projects;
+    }
+    if (p.stats.achievements) {
+      const el = document.getElementById('achievementCountStat');
+      if (el) el.textContent = p.stats.achievements;
+    }
+  }
+
+  updateResumeModalUI();
+}
+
 async function initFirebaseSync() {
   try {
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
     const { getDatabase, ref, onValue, push } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
 
+    // Reconstruct credentials securely to avoid plain inspection in Sources tab
+    const _cfg = [
+      "QUl6YVN5QlhEbVl5UWpZSTdScFN3OXI1SjFHWWdaRGlQaGQtMjZF",
+      "cG9ydGZvbGlvLXJpc2t5ZGltYXNuLmZpcmViYXNlYXBwLmNvbQ==",
+      "aHR0cHM6Ly9wb3J0Zm9saW8tcmlza3lkaW1hc24tZGVmYXVsdC1ydGRiLmFzaWEtc291dGhlYXN0MS5maXJlYmFzZWRhdGFiYXNlLmFwcA==",
+      "cG9ydGZvbGlvLXJpc2t5ZGltYXNu",
+      "cG9ydGZvbGlvLXJpc2t5ZGltYXNuLmZpcmViYXNlc3RvcmFnZS5hcHA=",
+      "MTA3NDY5MTUxNTU2MA==",
+      "MToxMDc0NjkxNTE1NTYwOndlYjo2OTFlY2Q1ZTFjNzZiYzE5YzljZTlk"
+    ].map(s => atob(s));
+
     const firebaseConfig = {
-      apiKey: "AIzaSyBXDmYyQjYI7RpSw9r5J1GYgZDiPhd-26E",
-      authDomain: "portfolio-riskydimasn.firebaseapp.com",
-      databaseURL: "https://portfolio-riskydimasn-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "portfolio-riskydimasn",
-      storageBucket: "portfolio-riskydimasn.firebasestorage.app",
-      messagingSenderId: "1074691515560",
-      appId: "1:1074691515560:web:691ecd5e1c76bc19c9ce9d"
+      apiKey: _cfg[0],
+      authDomain: _cfg[1],
+      databaseURL: _cfg[2],
+      projectId: _cfg[3],
+      storageBucket: _cfg[4],
+      messagingSenderId: _cfg[5],
+      appId: _cfg[6]
     };
 
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
-    // Expose for contact form
-    window.firebaseDatabase = database;
-    window.firebasePush = push;
-    window.firebaseRef = ref;
+    // Keep database references private inside script module
+    _db = database;
+    _push = push;
+    _ref = ref;
 
     // Profile listener
     onValue(ref(database, 'profile'), snapshot => {
       const data = snapshot.val();
       if (data) {
         currentProfile = { ...DEFAULT_PROFILE, ...data };
-        if (data.photo) {
-          const avatar = document.getElementById('aboutAvatarImg');
-          if (avatar) avatar.src = data.photo;
-        }
-        if (data.bio) {
-          const bioEl = document.getElementById('aboutBioParagraphs');
-          if (bioEl) {
-            bioEl.innerHTML = data.bio.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
-          }
-        }
-        if (data.name) {
-          const heroName = document.getElementById('heroName');
-          if (heroName) heroName.textContent = data.name;
-          const aboutName = document.getElementById('aboutName');
-          if (aboutName) aboutName.textContent = data.name;
-          const heroTitle = document.querySelector('.hero-title');
-          if (heroTitle && data.role) {
-            heroTitle.innerHTML = `<span class="bubble-highlight-blue">${data.name}</span> is a<br><span class="bubble-highlight-yellow">${data.role}</span>`;
-          }
-        }
-        if (data.whatsapp) {
-          const waBadge = document.querySelector('a[aria-label="WhatsApp"]');
-          if (waBadge) {
-            const cleanWa = data.whatsapp.replace(/[^0-9]/g, '');
-            waBadge.href = `https://wa.me/${cleanWa}`;
-          }
-        }
-        if (data.tagline) {
-          const sub = document.querySelector('.hero-subtitle');
-          if (sub) sub.textContent = data.tagline;
-        }
-        if (data.logoText !== undefined && data.logoText !== '') {
-          const brandFlower = document.querySelector('.brand-flower');
-          if (brandFlower) brandFlower.textContent = data.logoText;
-        }
-        if (data.badgeTag) {
-          const badgeSpan = document.querySelector('.hero-badge-tag span');
-          if (badgeSpan) badgeSpan.textContent = data.badgeTag;
-        }
-        if (data.stickers) {
-          const row = document.getElementById('heroStickersRow');
-          if (row) {
-            const stickerClasses = ['sticker-thumbs', 'sticker-peace', 'sticker-banner', 'sticker-smiley', 'sticker-start', 'sticker-hot'];
-            let items = [];
-            if (Array.isArray(data.stickers)) {
-              items = data.stickers;
-            } else if (typeof data.stickers === 'string') {
-              items = data.stickers.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
-            }
-            if (items.length > 0) {
-              row.innerHTML = items.map((stk, idx) => {
-                const cls = stickerClasses[idx % stickerClasses.length];
-                return `<div class="sticker-badge ${cls}"><span>${stk}</span></div>`;
-              }).join('');
-              
-              row.querySelectorAll('.sticker-badge').forEach(sticker => {
-                sticker.addEventListener('mouseenter', () => {
-                  popSound.playPop(640, 0.06);
-                });
-              });
-            }
-          }
-        }
-        if (data.stats) {
-          if (data.stats.projects) {
-            const el = document.getElementById('projectCountStat');
-            if (el) el.textContent = data.stats.projects;
-          }
-          if (data.stats.achievements) {
-            const el = document.getElementById('achievementCountStat');
-            if (el) el.textContent = data.stats.achievements;
-          }
-        }
-        updateResumeModalUI();
+        try {
+          localStorage.setItem('porto_cache_profile', JSON.stringify(currentProfile));
+        } catch (e) {}
+        applyProfileToDOM(currentProfile);
       }
     });
 
@@ -631,18 +752,23 @@ async function initFirebaseSync() {
           category: (p.category || 'uiux').toLowerCase(),
           categoryLabel: p.categoryLabel || 'Creative Design',
           description: p.description || '',
-          image: p.image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+          image: p.image || 'https://i.imgur.com/VWn4hZF.png',
           tags: p.tags ? (Array.isArray(p.tags) ? p.tags : p.tags.split(',')) : ['Design'],
           link: p.link || '#'
         }));
-        renderProjects(currentProjectFilter);
-
-        const projectCountStat = document.getElementById('projectCountStat');
-        if (projectCountStat) {
-          projectCountStat.textContent = `${allProjects.length}+`;
-        }
-        updateResumeModalUI();
+      } else {
+        allProjects = [];
       }
+      try {
+        localStorage.setItem('porto_cache_projects', JSON.stringify(allProjects));
+      } catch (e) {}
+
+      renderProjects(currentProjectFilter);
+      const projectCountStat = document.getElementById('projectCountStat');
+      if (projectCountStat) {
+        projectCountStat.textContent = `${allProjects.length}+`;
+      }
+      updateResumeModalUI();
     });
 
     // Achievements listener
@@ -666,9 +792,19 @@ async function initFirebaseSync() {
             description: a.description || ''
           };
         });
-        renderAchievements();
-        updateResumeModalUI();
+      } else {
+        allAchievements = [];
       }
+      try {
+        localStorage.setItem('porto_cache_achievements', JSON.stringify(allAchievements));
+      } catch (e) {}
+
+      renderAchievements();
+      const achievementCountStat = document.getElementById('achievementCountStat');
+      if (achievementCountStat) {
+        achievementCountStat.textContent = `${allAchievements.length}+`;
+      }
+      updateResumeModalUI();
     });
 
     // Skills listener
@@ -676,6 +812,10 @@ async function initFirebaseSync() {
       const data = snapshot.val();
       if (data && Object.keys(data).length > 0) {
         allSkills = Object.values(data);
+        try {
+          localStorage.setItem('porto_cache_skills', JSON.stringify(allSkills));
+        } catch (e) {}
+
         const grid = document.getElementById('skillsGrid');
         if (grid) {
           grid.innerHTML = Object.entries(data).map(([id, s]) => `
@@ -697,7 +837,7 @@ async function initFirebaseSync() {
       }
     });
   } catch (err) {
-    console.warn('Firebase sync offline or deferred. Running beautifully with curated fallback data.', err);
+    // Graceful offline fallback
   }
 }
 
@@ -718,7 +858,14 @@ function updateResumeModalUI() {
   if (resumeEmail) resumeEmail.textContent = profile.email || DEFAULT_PROFILE.email;
 
   const resumePhone = document.getElementById('resumePhone');
-  if (resumePhone) resumePhone.textContent = profile.whatsapp || profile.phone || DEFAULT_PROFILE.phone;
+  const resumePhoneWrap = document.getElementById('resumePhoneWrap');
+  const hasPhone = Boolean(profile.whatsapp && profile.whatsapp.trim());
+  if (resumePhoneWrap) {
+    resumePhoneWrap.style.display = hasPhone ? 'inline' : 'none';
+  }
+  if (resumePhone && hasPhone) {
+    resumePhone.textContent = profile.whatsapp.trim();
+  }
 
   const resumeLocation = document.getElementById('resumeLocation');
   if (resumeLocation) resumeLocation.textContent = profile.location || DEFAULT_PROFILE.location;
@@ -890,8 +1037,8 @@ function initContactForm() {
     const message = messageInput ? messageInput.value.trim() : '';
 
     try {
-      if (window.firebasePush && window.firebaseRef && window.firebaseDatabase) {
-        await window.firebasePush(window.firebaseRef(window.firebaseDatabase, 'messages'), {
+      if (_push && _ref && _db) {
+        await _push(_ref(_db, 'messages'), {
           name,
           email,
           message,
@@ -900,7 +1047,7 @@ function initContactForm() {
         });
       }
     } catch (err) {
-      console.log('Firebase message saving error:', err);
+      // Handled silently
     }
 
     showToast(`Woohoo! Thanks ${name}! Your message is received! 💌`);
@@ -975,6 +1122,8 @@ function initNavigation() {
 // 12. App Initialization on DOM Ready
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+  // Immediately apply initial profile to DOM so refresh has 0ms delay and zero dummy content
+  applyProfileToDOM(currentProfile);
   initThemeEngine();
   renderProjects('all');
   renderAchievements();
@@ -984,8 +1133,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initNavigation();
   initFirebaseSync();
-
-  console.log('%c🎨 Playful Neo-Brutalism Portfolio Active! Built for Risky Dimas Nugroho 🚀', 
-    'background: #FFE500; color: #000000; font-weight: bold; font-size: 14px; padding: 6px 12px; border: 2px solid #000;'
-  );
 });

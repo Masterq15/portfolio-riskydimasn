@@ -505,6 +505,24 @@ img {
   display: inline-block;
 }
 
+.hero-name-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--secondary-accent);
+  color: #000000;
+  border: 2.5px solid var(--border-color);
+  border-radius: 50%;
+  font-size: 0.95rem;
+  box-shadow: 2px 2px 0px var(--border-color);
+  vertical-align: middle;
+  margin-left: 6px;
+  transform: translateY(-4px);
+  user-select: none;
+}
+
 .bubble-highlight-yellow {
   background: var(--secondary-accent);
   color: #000000;

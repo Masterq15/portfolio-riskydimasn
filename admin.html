@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Risky Dimas Portfolio</title>
+    <!-- Browser Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -750,7 +752,7 @@
 
                                 <div class="form-group">
                                     <label for="profileTagline" class="form-label">Hero Subtitle / Tagline *</label>
-                                    <textarea id="profileTagline" class="form-control" rows="2" placeholder="Designing bold, playful & intuitive digital experiences that make people say 'WOW!'"></textarea>
+                                    <textarea id="profileTagline" class="form-control" rows="2" placeholder="Jangan Lupa Main free fire"></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -773,7 +775,7 @@
 
                                     <div class="form-group">
                                         <label for="profileWhatsapp" class="form-label"><i class="fab fa-whatsapp" style="color: var(--green-accent);"></i> WhatsApp Number / Link</label>
-                                        <input type="text" id="profileWhatsapp" class="form-control" placeholder="+62 813-2895-9495">
+                                        <input type="text" id="profileWhatsapp" class="form-control" placeholder="+62 8xx-xxxx-xxxx (Kosongkan jika ingin privasi)">
                                     </div>
                                 </div>
 
@@ -2361,11 +2363,11 @@ PixelCraft Studio Portfolio Web | Interactive Frontend Architecture • 2023</te
                     const resumePreviewText = data.resumeSummary || (data.bio ? data.bio.split('\n')[0] : 'Dynamic UI/UX designer and creative frontend builder...');
                     currentProfile.innerHTML = `
                         <div style="display: flex; gap: 20px; align-items: start; flex-wrap: wrap;">
-                            <img src="${data.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'}" alt="Avatar" style="width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-lg); border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-sm);">
+                            <img src="${data.photo || 'https://i.imgur.com/nYlo4Wr.jpeg'}" alt="Avatar" style="width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-lg); border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-sm);">
                             <div style="flex: 1; min-width: 240px;">
                                 <h4 style="font-family: var(--font-display); font-size: 1.3rem;">${data.name || 'Risky Dimas Nugroho'}</h4>
-                                <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--primary-accent); margin-bottom: 4px;"><strong>${data.role || 'Creative Designer'}</strong></p>
-                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;"><i class="fas fa-map-marker-alt"></i> ${data.location || 'Indonesia'} &bull; <i class="fas fa-envelope"></i> ${data.email || 'riskydimasnu@gmail.com'} &bull; <i class="fab fa-whatsapp"></i> ${data.whatsapp || '+62 813-2895-9495'}</p>
+                                <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--primary-accent); margin-bottom: 4px;"><strong>${data.role || 'UI/UX Designer & Competitive Gamer'}</strong></p>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;"><i class="fas fa-map-marker-alt"></i> ${data.location || 'Indonesia'} &bull; <i class="fas fa-envelope"></i> ${data.email || 'riskydimasnu@gmail.com'} ${data.whatsapp ? ('&bull; <i class="fab fa-whatsapp"></i> ' + data.whatsapp) : ''}</p>
                                 <p style="font-size: 0.92rem; line-height: 1.6;">${(data.bio || 'No bio set').replace(/\n/g, '<br>')}</p>
                             </div>
                         </div>
