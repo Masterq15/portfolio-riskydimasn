@@ -8,23 +8,24 @@
 // 0. DevTools Privacy & Source Protection Shield
 // ==========================================
 (function initPrivacyShield() {
+  // Simpan console asli DULU sebelum di-override
+  const origLog = Function.prototype.bind.call(console.log, console);
+
   try {
-    // Silence verbose logs & sensitive error leaks in production
+    // Tampilkan banner pakai console asli
+    origLog(
+      "%c 🚀 Risky Dimas Nugroho — Portfolio",
+      "background: #FFE500; color: #000000; font-weight: 800; font-size: 13px; padding: 4px 8px; border: 2px solid #000; border-radius: 4px;"
+    );
+  } catch (e) {}
+
+  try {
+    // Silence verbose logs & sensitive error leaks
     const noop = () => {};
     console.log = noop;
     console.warn = noop;
     console.info = noop;
     console.debug = noop;
-  } catch (e) {}
-
-  try {
-    // Custom protected environment banner
-    const origLog = Object.getPrototypeOf(console).log || console.log;
-    origLog.call(
-      console,
-      "%c 🚀 Risky Dimas Nugroho — Portfolio",
-      "background: #FFE500; color: #000000; font-weight: 800; font-size: 13px; padding: 4px 8px; border: 2px solid #000; border-radius: 4px;"
-    );
   } catch (e) {}
 
   // Privacy data is protected via:
