@@ -27,33 +27,10 @@
     );
   } catch (e) {}
 
-  // Prevent right-click inspect on page elements & images
-  document.addEventListener('contextmenu', (e) => {
-    const tag = e.target.tagName.toLowerCase();
-    if (tag !== 'input' && tag !== 'textarea') {
-      e.preventDefault();
-      if (typeof showToast === 'function') {
-        showToast("🔒 Inspect dinonaktifkan untuk melindungi privasi portfolio! ⚡");
-      }
-    }
-  });
-
-  // Shield against common DevTools inspect shortcut keys
-  document.addEventListener('keydown', (e) => {
-    const isDevKey = (
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
-      (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))
-    );
-    if (isDevKey) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (typeof showToast === 'function') {
-        showToast("🛡️ Akses Inspect & Source Code dilindungi demi keamanan privasi! ⚡");
-      }
-      return false;
-    }
-  });
+  // Privacy data is protected via:
+  // - Firebase config encoded (not plaintext)
+  // - Phone/WA only shown if set in database
+  // - No sensitive credentials hardcoded in HTML
 })();
 
 // Private module-scoped Firebase references (NEVER exposed to window)
