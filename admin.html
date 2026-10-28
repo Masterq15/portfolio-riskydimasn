@@ -808,14 +808,14 @@
 
                                     <div class="form-group">
                                         <label for="profileBadgeTag" class="form-label"><i class="fas fa-bolt" style="color: var(--secondary-accent);"></i> Hero Availability Tag</label>
-                                        <input type="text" id="profileBadgeTag" class="form-control" value="Available for Exciting Projects" placeholder="Available for Exciting Projects">
-                                        <span class="form-help">Badge status di atas headline home</span>
+                                        <input type="text" id="profileBadgeTag" class="form-control" value="" placeholder="Opsional (Kosongkan jika tidak ingin badge)">
+                                        <span class="form-help">Badge status di atas headline home (opsional)</span>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="profileStickers" class="form-label"><i class="fas fa-tags" style="color: var(--pink-accent);"></i> Hero Pop-Art Stickers & Badges</label>
-                                    <textarea id="profileStickers" class="form-control" rows="3" placeholder="Contoh: 👍 100% COOL, ✌️ PEACE & VIBES, 🔥 HOT STUFF">👍 100% COOL, ✌️ PEACE & VIBES, ★ "I Design it! And they like it", 😊 STAY PLAYFUL, ▶ START, 🔥 HOT STUFF</textarea>
+                                    <label for="profileStickers" class="form-label"><i class="fas fa-tags" style="color: var(--pink-accent);"></i> Hero Focus Tags / Chips</label>
+                                    <textarea id="profileStickers" class="form-control" rows="3" placeholder="Contoh: UI/UX &amp; Prototyping, Design Systems, Front-End Web">UI/UX &amp; Prototyping, Design Systems, Front-End Web, Competitive Esports Focus</textarea>
                                     <span class="form-help">Teks stiker asli sudah terisi di dalam kotak ini. Kamu bisa edit, tambah, atau hapus teksnya langsung!</span>
                                 </div>
 
@@ -2293,7 +2293,7 @@ PixelCraft Studio Portfolio Web | Interactive Frontend Architecture • 2023</te
                 whatsapp: document.getElementById('profileWhatsapp').value,
                 location: document.getElementById('profileLocation').value.trim() || 'Indonesia',
                 logoText: document.getElementById('profileLogoText').value.trim() || 'R',
-                badgeTag: document.getElementById('profileBadgeTag').value.trim() || 'Available for Exciting Projects',
+                badgeTag: document.getElementById('profileBadgeTag').value.trim() || '',
                 stickers: document.getElementById('profileStickers').value.trim(),
                 resumeSummary: document.getElementById('profileResumeSummary').value.trim(),
                 resumeSkills: document.getElementById('profileResumeSkills').value.trim(),

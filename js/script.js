@@ -44,25 +44,30 @@ let _ref = null;
 // ==========================================
 const DEFAULT_PROFILE = {
   name: "Risky Dimas Nugroho",
-  role: "UI/UX Designer & Competitive Gamer",
-  tagline: "Jangan Lupa Main free fire",
-  bio: "Hai, saya Risky Dimas Nugroho, mahasiswa Ilmu Komputer semester 5 dari Kebumen, Indonesia. Saya tertarik pada bagaimana teknologi dan kreativitas bisa berpadu untuk menciptakan produk digital yang tidak hanya berfungsi dengan baik, tetapi juga menyenangkan digunakan.\n\nSaya mendesain dan berkarya menggunakan Figma, Photoshop, dan CapCut, mulai dari tata letak antarmuka dan penyuntingan visual hingga konten video pendek. Saya masih menjelajahi bidang mana yang paling membuat saya bersemangat, dan setiap proyek saya anggap sebagai kesempatan untuk belajar hal baru serta mengasah gaya saya.\n\nDi luar kuliah, saya biasanya bermain game atau Olahraga lari dan lain-lain. Saya selalu terbuka pada ide-ide baru dan kesempatan untuk berkembang.",
+  role: "UI/UX Designer & Mahasiswa Ilmu Komputer",
+  tagline: "Mahasiswa Ilmu Komputer yang fokus merancang antarmuka aplikasi yang intuitif, fungsional, dan nyaman dipakai pengguna.",
+  bio: "Hai, saya Risky Dimas Nugroho, mahasiswa Ilmu Komputer semester 5 dari Kebumen, Indonesia. Saya tertarik pada bagaimana teknologi dan desain bisa berpadu untuk menciptakan produk digital yang fungsional dan nyaman digunakan.\n\nDalam mengerjakan proyek, saya biasa menggunakan Figma untuk perancangan antarmuka & wireframing, serta Photoshop dan CapCut untuk visual. Setiap tugas dan proyek praktikum saya jadikan sarana belajar hal baru untuk mengasah kemampuan teknis maupun visual.\n\nDi luar perkuliahan, saya aktif di kompetisi game esports dan suka berolahraga lari. Saya selalu terbuka untuk berdiskusi, belajar hal baru, dan berkolaborasi dalam proyek pengembangan web maupun aplikasi.",
   photo: "https://i.imgur.com/nYlo4Wr.jpeg",
-  location: "Indonesia",
+  location: "Kebumen, Indonesia",
   email: "riskydimasnu@gmail.com",
   phone: "",
   whatsapp: "",
-  resumeSummary: "UI/UX Designer dan Frontend Developer dengan latar belakang di dunia game kompetitif. Terampil menggunakan Figma, Photoshop, dan CapCut, berpengalaman memimpin tim esports serta membuat prototipe dan konten digital.",
-  resumeSkills: "UI/UX Design, Figma & Prototyping, Wireframing, Design Systems, HTML5, CSS, JavaScript, CapCut",
+  badgeTag: "",
+  resumeSummary: "Mahasiswa Ilmu Komputer semester 5 dengan minat di bidang UI/UX Design dan Front-End Web Development. Terampil menggunakan Figma untuk perancangan antarmuka dan wireframing, serta memahami dasar HTML, CSS, dan JavaScript. Memiliki pengalaman kepemimpinan tim dari dunia esports yang mengasah komunikasi dan kerja sama.",
+  resumeSkills: "UI/UX Design, Figma & Prototyping, Wireframing, HTML5 / CSS3, JavaScript, Adobe Photoshop, CapCut Video",
   resumePdfUrl: "",
-  resumeKeyItems: "Belajar Dasar Pemrograman JavaScript | Dicoding • 2026\n1st Place Winner - Jateng DIY Community Champions Esports Tournament | Jateng DIY Community • 2024\n1st Place Winner - International Female Legends Free Fire | IFL x Community DIY Free Fire • 2024"
+  resumeKeyItems: "Belajar Dasar Pemrograman JavaScript | Dicoding • 2026\nJuara 1 - Jateng DIY Community Champions Esports Tournament | Jateng DIY Community • 2024\nJuara 1 - International Female Legends Free Fire | IFL x Community DIY Free Fire • 2024"
 };
 
 // Immediate hydration from cache so refresh is instantaneous with ZERO dummy data
 let currentProfile = (() => {
   try {
     const cached = localStorage.getItem('porto_cache_profile');
-    if (cached) return { ...DEFAULT_PROFILE, ...JSON.parse(cached) };
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      parsed.badgeTag = '';
+      return { ...DEFAULT_PROFILE, ...parsed };
+    }
   } catch (e) {}
   return { ...DEFAULT_PROFILE };
 })();
@@ -326,8 +331,8 @@ function renderProjects(filter = 'all') {
     grid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
         <div style="font-size: 3.5rem; margin-bottom: 12px;">📁</div>
-        <h3 style="font-family: var(--font-display); font-size: 1.6rem;">No projects found in this category!</h3>
-        <p style="color: var(--text-muted);">Try selecting another filter or check back later.</p>
+        <h3 style="font-family: var(--font-display); font-size: 1.6rem;">Belum ada proyek di kategori ini</h3>
+        <p style="color: var(--text-muted);">Coba pilih filter lain atau kembali lagi nanti ya.</p>
       </div>
     `;
     return;
@@ -341,7 +346,7 @@ function renderProjects(filter = 'all') {
           <span class="window-dot dot-yellow"></span>
           <span class="window-dot dot-green"></span>
         </div>
-        <span class="window-title">${p.category}.app</span>
+        <span class="window-title">${(p.title || 'project').toLowerCase().replace(/[^a-z0-9]+/g, '_')}.app</span>
         <div class="window-controls-retro">
           <span class="window-btn-retro">−</span>
           <span class="window-btn-retro">□</span>
@@ -350,7 +355,7 @@ function renderProjects(filter = 'all') {
 
       <div class="project-preview-wrap">
         <img src="${p.image}" alt="${p.title}" class="project-preview-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80'">
-        <span class="project-category-overlay">${p.categoryLabel || p.category.toUpperCase()}</span>
+        <span class="project-category-overlay">${p.categoryLabel || 'UI/UX Design'}</span>
       </div>
 
       <div class="project-content">
@@ -362,13 +367,19 @@ function renderProjects(filter = 'all') {
         </div>
 
         <div class="project-footer-action">
-          <a href="${p.link || '#'}" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            <span>Explore Details</span>
+          <a href="${p.link && p.link !== '#' ? p.link : '#contact'}" ${p.link && p.link !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="project-link-btn">
+            <span>${p.link && p.link !== '#' ? 'Lihat Proyek' : 'Tanya Proyek Ini'}</span>
             <i class="fas fa-arrow-right"></i>
           </a>
-          <a href="${p.link || '#'}" target="_blank" rel="noopener noreferrer" class="project-arrow-icon" aria-label="Open project">
-            <i class="fas fa-external-link-alt"></i>
-          </a>
+          ${p.link && p.link !== '#' ? `
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="project-arrow-icon" aria-label="Open project external link">
+              <i class="fas fa-external-link-alt"></i>
+            </a>
+          ` : `
+            <span class="project-arrow-icon" aria-hidden="true">
+              <i class="fas fa-arrow-right"></i>
+            </span>
+          `}
         </div>
       </div>
     </article>
@@ -571,12 +582,12 @@ function applyProfileToDOM(p) {
     if (avatar) avatar.src = p.photo;
   }
 
-  // 2. Name & Role with Hero Badge
+  // 2. Name & Role
   const heroTitle = document.querySelector('.hero-title');
   if (heroTitle) {
     const nameStr = p.name || 'Risky Dimas Nugroho';
-    const roleStr = p.role || 'UI/UX Designer & Competitive Gamer';
-    heroTitle.innerHTML = `<span class="bubble-highlight-blue">${nameStr} <span class="hero-name-badge" title="Official Portfolio" aria-hidden="true"><i class="fas fa-check"></i></span></span> is a<br><span class="bubble-highlight-yellow">${roleStr}</span>`;
+    const roleStr = p.role || 'UI/UX Designer & Mahasiswa Ilmu Komputer';
+    heroTitle.innerHTML = `<span class="bubble-highlight-blue">${nameStr}</span><br><span class="bubble-highlight-yellow">${roleStr}</span>`;
   }
 
   const aboutName = document.getElementById('aboutName');
@@ -599,10 +610,9 @@ function applyProfileToDOM(p) {
     const brandFlower = document.querySelector('.brand-flower');
     if (brandFlower) brandFlower.textContent = p.logoText;
   }
-  if (p.badgeTag) {
-    const badgeSpan = document.querySelector('.hero-badge-tag span');
-    if (badgeSpan) badgeSpan.textContent = p.badgeTag;
-  }
+  
+  const statusDot = document.querySelector('.status-dot');
+  if (statusDot) statusDot.textContent = '';
 
   // 6. Stickers
   if (p.stickers) {
@@ -712,6 +722,7 @@ async function initFirebaseSync() {
     onValue(ref(database, 'profile'), snapshot => {
       const data = snapshot.val();
       if (data) {
+        data.badgeTag = '';
         currentProfile = { ...DEFAULT_PROFILE, ...data };
         try {
           localStorage.setItem('porto_cache_profile', JSON.stringify(currentProfile));
@@ -990,7 +1001,12 @@ function initResumeModal() {
   if (printBtn) {
     printBtn.addEventListener('click', () => {
       popSound.playPop(700, 0.12);
+      document.body.classList.add('is-printing-resume');
       window.print();
+      // Remove class after print dialog closes
+      setTimeout(() => {
+        document.body.classList.remove('is-printing-resume');
+      }, 1000);
     });
   }
 }
